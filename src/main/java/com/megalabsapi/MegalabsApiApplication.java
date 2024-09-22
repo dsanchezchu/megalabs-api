@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MegalabasApiApplication {
+public class MegalabsApiApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MegalabasApiApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(MegalabsApiApplication.class, args);
+    }
 
 }
