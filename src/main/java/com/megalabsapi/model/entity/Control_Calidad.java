@@ -7,7 +7,7 @@ import java.sql.Date;
 
 @Data
 @Entity
-@Table(name = "Control_Calidad")
+@Table(name = "control_Calidad")
 public class Control_Calidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

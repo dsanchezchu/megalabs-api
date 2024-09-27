@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Data
 @Entity
-@Table(name = "Detalle_Venta")
+@Table(name = "detalle_Venta")
 public class Detalle_Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,15 +14,16 @@ public class Detalle_Venta {
     private Integer idDetalleVenta;
 
     @ManyToOne
-    @JoinColumn(name = "ID_Venta", referencedColumnName = "ID_Venta", foreignKey = @ForeignKey(name = "fk_detalle_venta_venta"))
+    @JoinColumn(name = "ID_Venta", referencedColumnName = "ID_Venta", nullable = false)
     private Venta venta;
 
     @ManyToOne
-    @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", foreignKey = @ForeignKey(name = "fk_detalle_venta_producto"))
+    @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
 
-    @Column(name = "Cliente_RUC", length = 11)
-    private String clienteRUC;
+    @ManyToOne
+    @JoinColumn(name = "Cliente_RUC", referencedColumnName = "RUC", nullable = false)
+    private Cliente cliente;
 
     @Column(name = "Cantidad", nullable = false)
     private Integer cantidad;

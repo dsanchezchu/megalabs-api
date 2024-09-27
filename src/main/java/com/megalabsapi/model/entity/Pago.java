@@ -7,10 +7,11 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Pago")
+@Table(name = "pago")
 public class Pago {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,4 +31,8 @@ public class Pago {
     @Column(name = "Estado", nullable = false, length = 20)
     @Enumerated(EnumType.STRING)
     private PagoStatus estado;
+
+    // Relación con Venta
+    @OneToMany(mappedBy = "pago", cascade = CascadeType.ALL)
+    private List<Venta> ventas;
 }

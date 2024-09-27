@@ -8,11 +8,11 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "Venta")
+@Table(name = "venta")
 public class Venta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Venta")
+    @Column(name = "Id_Venta")
     private Integer idVenta;
 
     @Column(name = "Fecha", nullable = false)
@@ -22,9 +22,9 @@ public class Venta {
     private Time hora;
 
     @OneToMany(mappedBy = "venta")
-    private List<Detalle_Venta> detalles;
+    private List<Detalle_Venta> detalleVenta;
 
     @ManyToOne
-    @JoinColumn(name = "Pago_Id_Pago", referencedColumnName = "Id_Pago", foreignKey = @ForeignKey(name = "fk_venta_pago"))
+    @JoinColumn(name = "Pago_Id_Pago", referencedColumnName = "Id_Pago", foreignKey = @ForeignKey(name= "fk_venta_pago"), nullable = false)
     private Pago pago;
 }

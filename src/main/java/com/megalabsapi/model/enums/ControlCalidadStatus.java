@@ -1,7 +1,7 @@
 package com.megalabsapi.model.enums;
 
 public enum ControlCalidadStatus {
-    APROVADO,
+    APROBADO,
     EN_PRUEBAS,
     RECHAZAADO
 }

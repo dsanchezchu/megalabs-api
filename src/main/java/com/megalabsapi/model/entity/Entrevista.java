@@ -6,28 +6,27 @@ import java.sql.Date;
 import java.sql.Time;
 
 @Data
+@Table(name = "entrevista")
 @Entity
-@Table(name = "Entrevista")
 public class Entrevista {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID_Entrevista")
     private Integer idEntrevista;
 
-    @Column(name = "Fecha", nullable = false)
+    @Column(name = "fecha", nullable = false)
     private Date fecha;
 
-    @Column(name = "Hora", nullable = false)
+    @Column(name = "hora", nullable = false)
     private Time hora;
 
-    @Column(name = "Lugar_Sede", nullable = false, length = 50)
+    @Column(name = "lugar_sede", nullable = false, length = 50)
     private String lugarSede;
 
     @ManyToOne
-    @JoinColumn(name = "Representante_DNI", referencedColumnName = "DNI", foreignKey = @ForeignKey(name = "fk_entrevista_representante"))
+    @JoinColumn(name = "representante_dni", referencedColumnName = "dni", nullable = false, foreignKey = @ForeignKey(name = "fk_entrevista_representante"))
     private Representante representante;
 
     @ManyToOne
-    @JoinColumn(name = "Cliente_RUC", referencedColumnName = "RUC", foreignKey = @ForeignKey(name = "fk_entrevista_cliente"))
+    @JoinColumn(name = "cliente_ruc", referencedColumnName = "ruc", nullable = false, foreignKey = @ForeignKey(name = "fk_entrevista_cliente"))
     private Cliente cliente;
 }
