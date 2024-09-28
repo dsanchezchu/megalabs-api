@@ -19,4 +19,7 @@ public class Representante {
     @ManyToOne
     @JoinColumn(name = "Laboratorio_RUC", referencedColumnName = "RUC", foreignKey = @ForeignKey(name = "fk_representante_laboratorio"))
     private Laboratorio laboratorio;
+
+    @Column(name = "Contraseña", nullable = false)
+    private String contraseña;
 }
