@@ -5,5 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RepresentanteRepository extends JpaRepository<Representante, String> {
     Representante findByDni(String dni);
+
+    Representante findByEmail(String email);
 }
 

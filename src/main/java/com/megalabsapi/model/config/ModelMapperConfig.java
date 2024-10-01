@@ -1,4 +1,4 @@
-package com.megalabsapi.model.configuration;
+package com.megalabsapi.model.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

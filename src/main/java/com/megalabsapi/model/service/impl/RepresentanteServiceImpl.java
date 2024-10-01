@@ -35,10 +35,23 @@ public class RepresentanteServiceImpl implements RepresentanteService {
     @Override
     public LoginResponseDTO autenticarUsuario(LoginRequestDTO loginRequestDTO) {
         Representante representante = representanteRepository.findByDni(loginRequestDTO.getDni());
-
-        if (representante == null || !passwordEncoder.matches(loginRequestDTO.getPassword(), representante.getContraseña())) {
-            throw new RuntimeException("DNI o contraseña incorrectos");
+        if (representante == null) {
+            throw new RuntimeException("DNI incorrecto");
         }
+
+        if (representante.getIntentosFallidos() >= 3) {
+            throw new RuntimeException("La cuenta está bloqueada. Por favor, contacte al soporte.");
+        }
+
+        if (!passwordEncoder.matches(loginRequestDTO.getPassword(), representante.getContraseña())) {
+            representante.setIntentosFallidos(representante.getIntentosFallidos() + 1);
+            representanteRepository.save(representante);
+            throw new RuntimeException("Contraseña incorrecta");
+        }
+
+        // Reiniciar intentos fallidos después de una autenticación exitosa
+        representante.setIntentosFallidos(0);
+        representanteRepository.save(representante);
 
         // Convertimos el representante a un LoginResponseDTO usando ModelMapper
         LoginResponseDTO responseDTO = new LoginResponseDTO();
