@@ -10,6 +10,7 @@ import java.util.List;
 @Table(name = "producto")
 public class Producto {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Producto")
     private Integer idProducto;
 
@@ -30,6 +31,7 @@ public class Producto {
     // Relación con Entrega_Muestra
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Entrega_Muestra> entregaMuestras;
+
     // Relación con Control_Calidad
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Control_Calidad> controlCalidad;
@@ -45,4 +47,6 @@ public class Producto {
     // Relación con Categoria_Producto
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Categoria_Producto> categoriaProducto;
+
+
 }
