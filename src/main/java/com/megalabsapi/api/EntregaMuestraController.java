@@ -1,5 +1,6 @@
 package com.megalabsapi.api;
 
+import com.megalabsapi.dto.EntregaMuestraDTO;
 import com.megalabsapi.model.entity.Entrega_Muestra;
 import com.megalabsapi.model.enums.EntregaStatus;
 import com.megalabsapi.service.EntregaMuestraService;
@@ -20,8 +21,8 @@ public class EntregaMuestraController {
     }
 
     @GetMapping("/{ruc}")
-    public ResponseEntity<List<Entrega_Muestra>> obtenerEntregasPorCliente(@PathVariable String ruc) {
-        List<Entrega_Muestra> entregas = entregaMuestraService.obtenerEntregasPorCliente(ruc);
+    public ResponseEntity<List<EntregaMuestraDTO>> obtenerEntregasPorCliente(@PathVariable String ruc) {
+        List<EntregaMuestraDTO> entregas = entregaMuestraService.obtenerEntregasPorCliente(ruc);
         return ResponseEntity.ok(entregas);
     }
 }

@@ -1,5 +1,6 @@
 package com.megalabsapi.service.impl;
 
+import com.megalabsapi.dto.EstudioClinicoDTO;
 import com.megalabsapi.model.entity.Control_Calidad;
 import com.megalabsapi.repository.ControlCalidadRepository;
 import com.megalabsapi.service.ControlCalidadService;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ControlCalidadServiceImpl implements ControlCalidadService {
@@ -16,28 +18,48 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
     private ControlCalidadRepository controlCalidadRepository;
 
     @Override
-    public List<Control_Calidad> buscarPorProducto(Integer idProducto) {
-        return controlCalidadRepository.findByProductoIdProducto(idProducto);
+    public List<EstudioClinicoDTO> buscarPorProducto(String producto) {
+        List<Control_Calidad> resultados = controlCalidadRepository.findByProducto(producto);
+
+        // Convertir los resultados a DTOs
+        return resultados.stream().map(control ->
+                new EstudioClinicoDTO(
+                        control.getIdControl(),
+                        control.getProducto().getNombre(),
+                        control.getProducto().getEntregaMuestras().get(0).getCliente().getNombre(),
+                        control.getFecha(),  // Utiliza 'fecha' de Control_Calidad
+                        control.getResultado()
+                )
+        ).collect(Collectors.toList());
     }
 
     @Override
-    public Control_Calidad guardarControlCalidad(Control_Calidad controlCalidad) {
-        return controlCalidadRepository.save(controlCalidad);
+    public List<EstudioClinicoDTO> buscarPorCliente(String cliente) {
+        List<Control_Calidad> resultados = controlCalidadRepository.findByCliente(cliente);
+
+        return resultados.stream().map(control ->
+                new EstudioClinicoDTO(
+                        control.getIdControl(),
+                        control.getProducto().getNombre(),
+                        control.getProducto().getEntregaMuestras().get(0).getCliente().getNombre(),
+                        control.getFecha(),
+                        control.getResultado()
+                )
+        ).collect(Collectors.toList());
     }
 
     @Override
-    public Control_Calidad actualizarControlCalidad(Integer idControl, Control_Calidad controlCalidad) {
-        controlCalidad.setIdControl(idControl);
-        return controlCalidadRepository.save(controlCalidad);
-    }
+    public List<EstudioClinicoDTO> buscarPorFecha(Date fechaInicio, Date fechaFin) {
+        List<Control_Calidad> resultados = controlCalidadRepository.findByFecha(fechaInicio, fechaFin);
 
-    @Override
-    public void eliminarControlCalidad(Integer idControl) {
-        controlCalidadRepository.deleteById(idControl);
-    }
-
-    @Override
-    public List<Control_Calidad> listarControlesCalidad() {
-        return controlCalidadRepository.findAll();
+        return resultados.stream().map(control ->
+                new EstudioClinicoDTO(
+                        control.getIdControl(),
+                        control.getProducto().getNombre(),
+                        control.getProducto().getEntregaMuestras().get(0).getCliente().getNombre(),
+                        control.getFecha(),
+                        control.getResultado()
+                )
+        ).collect(Collectors.toList());
     }
 }

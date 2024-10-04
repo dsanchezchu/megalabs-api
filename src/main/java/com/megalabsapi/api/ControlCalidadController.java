@@ -1,5 +1,6 @@
 package com.megalabsapi.api;
 
+import com.megalabsapi.dto.EstudioClinicoDTO;
 import com.megalabsapi.model.entity.Control_Calidad;
 import com.megalabsapi.service.ControlCalidadService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,33 +17,22 @@ public class ControlCalidadController {
     @Autowired
     private ControlCalidadService controlCalidadService;
 
-    @GetMapping
-    public ResponseEntity<List<Control_Calidad>> listarControlesCalidad() {
-        List<Control_Calidad> controles = controlCalidadService.listarControlesCalidad();
-        return ResponseEntity.ok(controles);
-    }
+    // Búsqueda por criterios: producto, cliente (médico) y fecha
+    @GetMapping("/buscar/estudios")
+    public List<EstudioClinicoDTO> buscarEstudios(
+            @RequestParam(value = "producto", required = false) String producto,
+            @RequestParam(value = "cliente", required = false) String cliente,
+            @RequestParam(value = "fechaInicio", required = false) Date fechaInicio,
+            @RequestParam(value = "fechaFin", required = false) Date fechaFin) {
 
-    @GetMapping("/producto/{idProducto}")
-    public ResponseEntity<List<Control_Calidad>> listarControlesPorProducto(@PathVariable Integer idProducto) {
-        List<Control_Calidad> controles = controlCalidadService.buscarPorProducto(idProducto);
-        return ResponseEntity.ok(controles);
-    }
-
-    @PostMapping
-    public ResponseEntity<Control_Calidad> crearControlCalidad(@RequestBody Control_Calidad controlCalidad) {
-        Control_Calidad nuevoControl = controlCalidadService.guardarControlCalidad(controlCalidad);
-        return ResponseEntity.ok(nuevoControl);
-    }
-
-    @PutMapping("/{idControl}")
-    public ResponseEntity<Control_Calidad> actualizarControlCalidad(@PathVariable Integer idControl, @RequestBody Control_Calidad controlCalidad) {
-        Control_Calidad actualizado = controlCalidadService.actualizarControlCalidad(idControl, controlCalidad);
-        return ResponseEntity.ok(actualizado);
-    }
-
-    @DeleteMapping("/{idControl}")
-    public ResponseEntity<Void> eliminarControlCalidad(@PathVariable Integer idControl) {
-        controlCalidadService.eliminarControlCalidad(idControl);
-        return ResponseEntity.noContent().build();
+        if (producto != null) {
+            return controlCalidadService.buscarPorProducto(producto);
+        } else if (cliente != null) {
+            return controlCalidadService.buscarPorCliente(cliente);
+        } else if (fechaInicio != null && fechaFin != null) {
+            return controlCalidadService.buscarPorFecha(fechaInicio, fechaFin);
+        } else {
+            return List.of(); // Lista vacía si no se pasan criterios
+        }
     }
 }
