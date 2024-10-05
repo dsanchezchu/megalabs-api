@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface LoginAttemptService {
     void recordLoginAttempt(String ipAddress, String device, String location, Representante representante);
-    List<LoginAttempt> getSuspiciousAttemptsByRepresentante(Long representanteId);
+    List<LoginAttempt> getSuspiciousAttemptsByRepresentanteDni(String dni);
 }
 

@@ -19,8 +19,8 @@ public class SecurityController {
     private LoginAttemptService loginAttemptService;
 
     @GetMapping("/suspicious-activities")
-    public ResponseEntity<List<LoginAttempt>> getSuspiciousActivities(@RequestParam Long representanteId) {
-        List<LoginAttempt> suspiciousAttempts = loginAttemptService.getSuspiciousAttemptsByRepresentante(representanteId);
+    public ResponseEntity<List<LoginAttempt>> getSuspiciousActivities(@RequestParam String representanteDni) {
+        List<LoginAttempt> suspiciousAttempts = loginAttemptService.getSuspiciousAttemptsByRepresentanteDni(representanteDni);
         return ResponseEntity.ok(suspiciousAttempts);
     }
 }

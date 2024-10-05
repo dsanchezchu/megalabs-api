@@ -3,6 +3,7 @@ package com.megalabsapi.model.service.impl;
 import com.megalabsapi.model.entity.LoginAttempt;
 import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.model.repository.LoginAttemptRepository;
+import com.megalabsapi.model.repository.RepresentanteRepository;
 import com.megalabsapi.model.service.NotificationService;
 import com.megalabsapi.model.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
 
     @Autowired
     private LoginAttemptRepository loginAttemptRepository;
+
+    @Autowired
+    private RepresentanteRepository representanteRepository;
 
     @Autowired
     private NotificationService notificationService;
@@ -49,8 +53,16 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
     }
 
     @Override
-    public List<LoginAttempt> getSuspiciousAttemptsByRepresentante(Long representanteId) {
-        return List.of();
+    public List<LoginAttempt> getSuspiciousAttemptsByRepresentanteDni(String dni) {
+        // Buscar el representante por DNI
+        Representante representante = representanteRepository.findByDni(dni);
+
+        if (representante == null) {
+            throw new IllegalArgumentException("Representante no encontrado con DNI: " + dni);
+        }
+
+        // Buscar y devolver los intentos sospechosos asociados al representante
+        return loginAttemptRepository.findByRepresentanteAndIsSuspiciousTrue(representante);
     }
 
     private boolean isSuspiciousAttempt(String ipAddress, String device, Representante representante) {

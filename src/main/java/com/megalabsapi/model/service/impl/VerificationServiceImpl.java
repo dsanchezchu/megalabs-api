@@ -2,6 +2,7 @@ package com.megalabsapi.model.service.impl;
 
 import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.model.entity.VerificationCode;
+import com.megalabsapi.model.mapper.VerificationCodeMapper;
 import com.megalabsapi.model.repository.VerificationCodeRepository;
 import com.megalabsapi.model.service.NotificationService;
 import com.megalabsapi.model.service.VerificationService;
@@ -20,6 +21,9 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
+
+    @Autowired
+    private VerificationCodeMapper verificationCodeMapper;  // Inyectamos el mapper
 
     @Override
     public String generateVerificationCode() {
@@ -46,10 +50,7 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public void sendVerificationCode(String email) {
-        // Generar el código de verificación
         String verificationCode = generateVerificationCode();
-
-        // Lógica para enviar el correo con el código generado
         String message = "Su código de verificación es: " + verificationCode;
         notificationService.sendRecoveryEmail(email, message);
     }

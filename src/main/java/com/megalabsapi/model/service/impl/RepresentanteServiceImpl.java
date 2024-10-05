@@ -3,6 +3,8 @@ package com.megalabsapi.model.service.impl;
 import com.megalabsapi.model.dto.LoginRequestDTO;
 import com.megalabsapi.model.dto.LoginResponseDTO;
 import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.model.mapper.LoginMapper;
+import com.megalabsapi.model.mapper.RepresentanteMapper;
 import com.megalabsapi.model.repository.RepresentanteRepository;
 import com.megalabsapi.model.service.RepresentanteService;
 import org.modelmapper.ModelMapper;
@@ -20,45 +22,55 @@ public class RepresentanteServiceImpl implements RepresentanteService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private RepresentanteMapper representanteMapper;
+
+    @Autowired
+    private LoginMapper loginMapper;
 
     @Override
     public Representante registrarRepresentante(Representante representante) {
         // Cifrar la contraseña antes de guardarla
-        String contraseñaCifrada = passwordEncoder.encode(representante.getContraseña());
-        representante.setContraseña(contraseñaCifrada);
-
-        // Guardar el representante en la base de datos
+        representante.setContraseña(passwordEncoder.encode(representante.getContraseña()));
         return representanteRepository.save(representante);
     }
 
     @Override
-    public LoginResponseDTO autenticarUsuario(LoginRequestDTO loginRequestDTO) {
+    public Representante autenticarUsuario(LoginRequestDTO loginRequestDTO) {
         Representante representante = representanteRepository.findByDni(loginRequestDTO.getDni());
+
         if (representante == null) {
-            throw new RuntimeException("DNI incorrecto");
+            throw new IllegalArgumentException("DNI incorrecto");
         }
 
-        if (representante.getIntentosFallidos() >= 3) {
-            throw new RuntimeException("La cuenta está bloqueada. Por favor, contacte al soporte.");
-        }
-
+        // Verificación de contraseña
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), representante.getContraseña())) {
             representante.setIntentosFallidos(representante.getIntentosFallidos() + 1);
             representanteRepository.save(representante);
-            throw new RuntimeException("Contraseña incorrecta");
+            throw new IllegalArgumentException("Contraseña incorrecta");
         }
 
-        // Reiniciar intentos fallidos después de una autenticación exitosa
+        // Reiniciar intentos fallidos en caso de autenticación exitosa
         representante.setIntentosFallidos(0);
         representanteRepository.save(representante);
 
-        // Convertimos el representante a un LoginResponseDTO usando ModelMapper
-        LoginResponseDTO responseDTO = new LoginResponseDTO();
-        responseDTO.setNombre(representante.getNombre());
-        responseDTO.setMensaje("Inicio de sesión exitoso");
-
-        return responseDTO;
+        // Retorna el representante autenticado
+        return representante;
     }
-}
 
+    public void actualizarCredenciales(Representante representante, String nuevaContraseña, String nuevoEmail) {
+        // Actualizar la contraseña, cifrando la nueva contraseña
+        representante.setContraseña(passwordEncoder.encode(nuevaContraseña));
+
+        // Actualizar el correo electrónico
+        representante.setEmail(nuevoEmail);
+
+        // Guardar los cambios
+        representanteRepository.save(representante);
+    }
+
+    @Override
+    public Representante findByDni(String dni) {
+        return representanteRepository.findByDni(dni);  // Buscar representante por su dni en el repositorio
+    }
+
+}

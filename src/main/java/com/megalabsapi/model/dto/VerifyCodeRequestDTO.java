@@ -9,7 +9,8 @@ public class VerifyCodeRequestDTO {
     @NotEmpty(message = "El código de verificación es obligatorio")
     private String code;
 
-    @NotEmpty(message = "El ID del representante es obligatorio")
-    private Long representanteId;
+    @NotEmpty(message = "El DNI del representante es obligatorio")
+    private String representanteDni;
 }
+
 

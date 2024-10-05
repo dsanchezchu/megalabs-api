@@ -7,5 +7,9 @@ import com.megalabsapi.model.entity.Representante;
 public interface RepresentanteService {
     Representante registrarRepresentante(Representante representante);
 
-    LoginResponseDTO autenticarUsuario(LoginRequestDTO loginRequestDTO);
+    Representante autenticarUsuario(LoginRequestDTO loginRequestDTO);
+
+    void actualizarCredenciales(Representante representante, String nuevaContraseña, String nuevoEmail);
+
+    Representante findByDni(String dni);
 }

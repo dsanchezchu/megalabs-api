@@ -7,5 +7,7 @@ public interface RepresentanteRepository extends JpaRepository<Representante, St
     Representante findByDni(String dni);
 
     Representante findByEmail(String email);
+
+    Representante findByEmailOrDni(String email, String dni);
 }
 

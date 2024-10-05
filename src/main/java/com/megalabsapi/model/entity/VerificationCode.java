@@ -26,7 +26,9 @@ public class VerificationCode {
     @Column(name = "is_used", nullable = false)
     private boolean isUsed = false; // Para asegurarse de que el código no sea reutilizado
 
-    public void setIsUsed(boolean b) {
+    public void setIsUsed(boolean isUsed) {
+        this.isUsed = isUsed;
     }
+
 }
 

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface VerificationCodeRepository extends JpaRepository<VerificationCode, String> {
 
-    VerificationCode findByCodeAndRepresentante(@NotEmpty(message = "El código de verificación es obligatorio") String code, @NotEmpty(message = "El ID del representante es obligatorio") Long representanteId);
+    VerificationCode findByCodeAndRepresentanteDni(@NotEmpty(message = "El código de verificación es obligatorio") String code, @NotEmpty(message = "El DNI del representante es obligatorio") String representanteDni);
 }

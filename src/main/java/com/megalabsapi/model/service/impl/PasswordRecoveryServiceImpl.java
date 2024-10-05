@@ -2,6 +2,7 @@ package com.megalabsapi.model.service.impl;
 
 import com.megalabsapi.model.entity.PasswordRecoveryToken;
 import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.model.mapper.RecoverPasswordMapper;
 import com.megalabsapi.model.repository.PasswordRecoveryTokenRepository;
 import com.megalabsapi.model.repository.RepresentanteRepository;
 import com.megalabsapi.model.service.PasswordRecoveryService;
@@ -29,11 +30,16 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
     @Autowired
     private NotificationService notificationService;
 
+    @Autowired
+    private RecoverPasswordMapper recoverPasswordMapper;  // Inyectamos el mapper
+
+    // Inyectamos la URL base desde las propiedades del sistema
     @Value("${app.base-url}")
     private String baseUrl;
 
     @Override
     public void createPasswordRecoveryToken(String email) throws UnsupportedEncodingException {
+        // Buscar al representante por correo electrónico
         Representante representante = representanteRepository.findByEmail(email);
         if (representante == null) {
             throw new RuntimeException("Correo electrónico no encontrado");
@@ -51,9 +57,16 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
         // Guardar el token en la base de datos
         tokenRepository.save(recoveryToken);
 
-        // Enviar el enlace de recuperación al correo electrónico del usuario
+        // Codificar el token para la URL
         String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
         String recoveryUrl = baseUrl + "/recover-password?token=" + encodedToken;
-        notificationService.sendRecoveryEmail(representante.getEmail(), recoveryUrl);
+
+        // Crear el mensaje con el nombre del usuario y el enlace de recuperación
+        String message = String.format(
+                "Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s",
+                representante.getNombre(), recoveryUrl);  // Aquí se asegura que el enlace y el nombre del usuario están bien concatenados.
+
+        // Enviar el correo de recuperación
+        notificationService.sendRecoveryEmail(representante.getEmail(), message);
     }
 }
