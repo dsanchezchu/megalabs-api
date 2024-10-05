@@ -27,4 +27,8 @@ public class Control_Calidad {
     @ManyToOne
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_ruc", referencedColumnName = "RUC", nullable = false)
+    private Cliente cliente;
 }
