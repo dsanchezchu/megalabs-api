@@ -9,15 +9,15 @@ import java.sql.Date;
 import java.util.List;
 
 public interface ControlCalidadRepository extends JpaRepository<Control_Calidad, Integer> {
-    // Búsqueda por producto
+    // Búsqueda por nombre del producto
     @Query("SELECT c FROM Control_Calidad c WHERE c.producto.nombre LIKE %:nombreProducto%")
     List<Control_Calidad> findByProducto(@Param("nombreProducto") String nombreProducto);
 
-    // Búsqueda por médico (cliente)
-    @Query("SELECT c FROM Control_Calidad c JOIN c.producto p JOIN p.entregaMuestras e JOIN e.cliente cl WHERE cl.nombre LIKE %:nombreCliente%")
+    // Búsqueda por cliente (ajustado para una relación directa, si existe)
+    @Query("SELECT c FROM Control_Calidad c JOIN c.cliente cl WHERE cl.nombre LIKE %:nombreCliente%")
     List<Control_Calidad> findByCliente(@Param("nombreCliente") String nombreCliente);
 
-    // Búsqueda por fecha (ajustado a 'fecha')
+    // Búsqueda por fecha entre dos fechas (sin cambios)
     @Query("SELECT c FROM Control_Calidad c WHERE c.fecha BETWEEN :fechaInicio AND :fechaFin")
     List<Control_Calidad> findByFecha(@Param("fechaInicio") Date fechaInicio, @Param("fechaFin") Date fechaFin);
 

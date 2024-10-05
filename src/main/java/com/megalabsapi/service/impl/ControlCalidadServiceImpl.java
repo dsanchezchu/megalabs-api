@@ -26,7 +26,7 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
                 new EstudioClinicoDTO(
                         control.getIdControl(),
                         control.getProducto().getNombre(),
-                        control.getProducto().getEntregaMuestras().get(0).getCliente().getNombre(),
+                        control.getCliente().getNombre(),  // Suponiendo que ahora haya una relación directa con Cliente
                         control.getFecha(),  // Utiliza 'fecha' de Control_Calidad
                         control.getResultado()
                 )
@@ -41,7 +41,7 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
                 new EstudioClinicoDTO(
                         control.getIdControl(),
                         control.getProducto().getNombre(),
-                        control.getProducto().getEntregaMuestras().get(0).getCliente().getNombre(),
+                        control.getCliente().getNombre(),
                         control.getFecha(),
                         control.getResultado()
                 )
@@ -56,7 +56,7 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
                 new EstudioClinicoDTO(
                         control.getIdControl(),
                         control.getProducto().getNombre(),
-                        control.getProducto().getEntregaMuestras().get(0).getCliente().getNombre(),
+                        control.getCliente().getNombre(),
                         control.getFecha(),
                         control.getResultado()
                 )
