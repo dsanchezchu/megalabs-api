@@ -1,6 +1,7 @@
 package com.megalabsapi.service.impl;
 
 import com.megalabsapi.model.entity.Entrega_Muestra;
+import com.megalabsapi.model.enums.EntregaStatus;
 import com.megalabsapi.repository.EntregaMuestraRepository;
 import com.megalabsapi.service.AdminEntregaMuestraService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -31,6 +33,13 @@ public class EntregaMuestraServiceImpl implements AdminEntregaMuestraService {
     public Page<Entrega_Muestra> paginate(Pageable pageable) {
         return entregaMuestraRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Entrega_Muestra> findByFecha(Date fecha) {
+        return entregaMuestraRepository.findByFecha(fecha);
+    }
+
+
 
     @Transactional
     @Override
@@ -63,5 +72,10 @@ public class EntregaMuestraServiceImpl implements AdminEntregaMuestraService {
     public void delete(Integer id) {
         Entrega_Muestra entregaMuestra = findById(id);
         entregaMuestraRepository.delete(entregaMuestra);
+    }
+
+    @Override
+    public List<Entrega_Muestra> findByClienteRuc(String RUC) {
+        return entregaMuestraRepository.findByClienteRuc(RUC);
     }
 }

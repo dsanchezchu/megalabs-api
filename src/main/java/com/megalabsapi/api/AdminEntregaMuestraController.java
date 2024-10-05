@@ -2,15 +2,17 @@ package com.megalabsapi.api;
 
 
 import com.megalabsapi.model.entity.Entrega_Muestra;
+import com.megalabsapi.model.enums.EntregaStatus;
 import com.megalabsapi.service.AdminEntregaMuestraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -55,4 +57,18 @@ public class AdminEntregaMuestraController {
         adminEntregaMuestraService.delete(id);
         return new ResponseEntity<Entrega_Muestra>(HttpStatus.NO_CONTENT);
     }
+
+    @GetMapping("/filtrar/muestra")
+    public ResponseEntity<List<Entrega_Muestra>> findByStatus(@RequestParam("RUC") String RUC) {
+        List<Entrega_Muestra> entregas = adminEntregaMuestraService.findByClienteRuc(RUC);
+        return ResponseEntity.ok(entregas);
+    }
+
+    @GetMapping("/filtrar/fecha")
+    public ResponseEntity<List<Entrega_Muestra>> findByFecha(@RequestParam("fechaVenta")  @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
+        List<Entrega_Muestra> fechaFiltro = adminEntregaMuestraService.findByFecha(fecha);
+        return ResponseEntity.ok(fechaFiltro);
+    }
+
+
 }
