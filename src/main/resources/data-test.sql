@@ -33,10 +33,10 @@ VALUES
     (75.00, '2024-09-27', 2);
 
 -- Insertar en la tabla control_calidad
-INSERT INTO control_calidad (Fecha, Resultado, Estado, Producto_ID_Producto)
+INSERT INTO control_calidad (Fecha, Resultado, Estado, Producto_ID_Producto, cliente_ruc)
 VALUES
-    ('2024-09-27', 'Eficiente', 'APROBADO', 1),
-    ('2024-09-27', 'Eficiente', 'EN_PRUEBAS', 2);
+    ('2024-09-27', 'Eficiente', 'APROBADO', 1, '98354231024'),
+    ('2024-09-27', 'Eficiente', 'EN_PRUEBAS', 2, '98354231025' );
 
 -- Insertar en la tabla entrega_muestra
 INSERT INTO entrega_muestra (Fecha, Lugar, Estado, Cliente_RUC, Producto_ID_Producto)
