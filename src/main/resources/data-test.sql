@@ -39,10 +39,8 @@ VALUES
     ('2024-09-27', 'Eficiente', 'EN_PRUEBAS', 2, '98354231025' );
 
 -- Insertar en la tabla entrega_muestra
-INSERT INTO entrega_muestra (Fecha, Lugar, Estado, Cliente_RUC, Producto_ID_Producto)
-VALUES
-    ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '98354231024', 1),
-    ('2024-09-27', 'Clínica Ejemplo', 'ENTREGADO', '98354231025', 2);
+INSERT INTO entrega_Muestra (Fecha, Lugar, Estado, created_at,updated_at, Cliente_RUC, Producto_ID_Producto)
+VALUES ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '2024-09-25 14:32:00', '2024-09-27 09:00:00', '98354231024', 1);
 
 -- Insertar en la tabla pago
 INSERT INTO pago (Monto_Total, Fecha_Pago, Metodo_Pago, Estado)
