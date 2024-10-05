@@ -3,8 +3,6 @@ package com.megalabsapi.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Entity
 @Table(name = "cliente")
@@ -22,7 +20,4 @@ public class Cliente {
     @Column(name = "Especializacion", nullable = false)
     private String especializacion;
 
-    // Relación uno a muchos con Entrega_Muestra
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Entrega_Muestra> entregasMuestra;
 }
