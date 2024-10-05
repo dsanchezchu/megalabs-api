@@ -23,26 +23,4 @@ public class Producto {
     @Enumerated(EnumType.STRING)
     private StockStatus stock;
 
-    // Relación con Detalle_Venta
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Detalle_Venta> detalleVentas;
-
-    // Relación con Entrega_Muestra
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Entrega_Muestra> entregaMuestras;
-    // Relación con Control_Calidad
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Control_Calidad> controlCalidad;
-
-    // Relación con Regulacion
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Regulacion> regulacione;
-
-    // Relación con Catalogo_Precios
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Catalogo_Precio> catalogoPrecio;
-
-    // Relación con Categoria_Producto
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Categoria_Producto> categoriaProducto;
 }
