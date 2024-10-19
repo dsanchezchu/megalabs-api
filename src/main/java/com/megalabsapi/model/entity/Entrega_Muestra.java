@@ -39,4 +39,15 @@ public class Entrega_Muestra {
     @ManyToOne
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
+
+    // Metodo para establecer created_at antes de persistir
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }

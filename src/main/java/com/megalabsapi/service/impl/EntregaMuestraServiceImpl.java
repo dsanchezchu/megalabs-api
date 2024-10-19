@@ -2,16 +2,12 @@ package com.megalabsapi.service.impl;
 
 import com.megalabsapi.dto.EntregaMuestraDTO;
 import com.megalabsapi.model.entity.Entrega_Muestra;
-import com.megalabsapi.model.enums.EntregaStatus;
 import com.megalabsapi.repository.EntregaMuestraRepository;
 import com.megalabsapi.service.EntregaMuestraService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.megalabsapi.service.AdminEntregaMuestraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -43,7 +39,6 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
     public List<Entrega_Muestra> findByFecha(Date fecha) {
         return entregaMuestraRepository.findByFecha(fecha);
     }
-
 
 
     @Transactional
@@ -79,10 +74,6 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
         entregaMuestraRepository.delete(entregaMuestra);
     }
 
-    @Override
-    public List<Entrega_Muestra> findByClienteRuc(String RUC) {
-        return entregaMuestraRepository.findByClienteRuc(RUC);
-    }
 
     @Override
     public List<EntregaMuestraDTO> obtenerEntregasPorCliente(String ruc) {
@@ -91,7 +82,7 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
         // Convertir la lista de Entrega_Muestra a EntregaMuestraDTO
         return entregas.stream()
                 .map(entrega -> new EntregaMuestraDTO(
-                        entrega.getIdEntrega(),
+                        entrega.getId(),
                         entrega.getLugar(),
                         entrega.getFecha(),
                         entrega.getEstado().name() // Usamos name() para obtener el String del Enum

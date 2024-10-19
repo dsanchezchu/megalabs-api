@@ -1,5 +1,6 @@
 package com.megalabsapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,5 +25,6 @@ public class Cliente {
 
     // Relación uno a muchos con Entrega_Muestra
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<Entrega_Muestra> entregasMuestra;
 }
