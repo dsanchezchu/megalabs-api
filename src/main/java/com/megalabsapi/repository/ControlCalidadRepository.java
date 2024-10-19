@@ -1,6 +1,6 @@
 package com.megalabsapi.repository;
 
-import com.megalabsapi.model.entity.Control_Calidad;
+import com.megalabsapi.entity.Control_Calidad;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

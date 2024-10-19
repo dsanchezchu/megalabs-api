@@ -1,8 +1,7 @@
 package com.megalabsapi.model.service;
 
-import com.megalabsapi.model.dto.LoginRequestDTO;
-import com.megalabsapi.model.dto.LoginResponseDTO;
-import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.dto.LoginRequestDTO;
+import com.megalabsapi.entity.Representante;
 
 public interface RepresentanteService {
     Representante registrarRepresentante(Representante representante);

@@ -1,7 +1,7 @@
 package com.megalabsapi.model.service;
 
-import com.megalabsapi.model.entity.LoginAttempt;
-import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.entity.LoginAttempt;
+import com.megalabsapi.entity.Representante;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.megalabsapi.service;
 import java.sql.Date;
 import java.util.List;
-import com.megalabsapi.model.entity.Entrevista;
+import com.megalabsapi.entity.Entrevista;
 
 public interface EntrevistaService {
     List<Entrevista> obtenerEntrevistasPorRepresentante(String dniRepresentante);

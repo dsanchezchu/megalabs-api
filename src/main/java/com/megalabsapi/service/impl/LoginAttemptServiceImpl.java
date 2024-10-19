@@ -1,9 +1,9 @@
 package com.megalabsapi.model.service.impl;
 
-import com.megalabsapi.model.entity.LoginAttempt;
-import com.megalabsapi.model.entity.Representante;
-import com.megalabsapi.model.repository.LoginAttemptRepository;
-import com.megalabsapi.model.repository.RepresentanteRepository;
+import com.megalabsapi.entity.LoginAttempt;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.repository.LoginAttemptRepository;
+import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.model.service.NotificationService;
 import com.megalabsapi.model.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;

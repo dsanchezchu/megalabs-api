@@ -1,9 +1,9 @@
 package com.megalabsapi.model.service.impl;
 
-import com.megalabsapi.model.entity.Representante;
-import com.megalabsapi.model.entity.VerificationCode;
-import com.megalabsapi.model.mapper.VerificationCodeMapper;
-import com.megalabsapi.model.repository.VerificationCodeRepository;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.entity.VerificationCode;
+import com.megalabsapi.mapper.VerificationCodeMapper;
+import com.megalabsapi.repository.VerificationCodeRepository;
 import com.megalabsapi.model.service.NotificationService;
 import com.megalabsapi.model.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;

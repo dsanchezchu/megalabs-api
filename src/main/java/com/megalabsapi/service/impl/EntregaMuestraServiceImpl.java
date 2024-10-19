@@ -1,20 +1,12 @@
 package com.megalabsapi.service.impl;
 
 import com.megalabsapi.dto.EntregaMuestraDTO;
-import com.megalabsapi.model.entity.Entrega_Muestra;
-import com.megalabsapi.model.enums.EntregaStatus;
+import com.megalabsapi.entity.Entrega_Muestra;
 import com.megalabsapi.repository.EntregaMuestraRepository;
 import com.megalabsapi.service.EntregaMuestraService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.megalabsapi.service.AdminEntregaMuestraService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
-import java.util.Date;
+
 import java.util.List;
 import java.util.stream.Collectors;
 

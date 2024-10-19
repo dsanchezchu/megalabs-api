@@ -1,8 +1,7 @@
 package com.megalabsapi.api;
 
 
-import com.megalabsapi.model.entity.Entrega_Muestra;
-import com.megalabsapi.model.enums.EntregaStatus;
+import com.megalabsapi.entity.Entrega_Muestra;
 import com.megalabsapi.service.AdminEntregaMuestraService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

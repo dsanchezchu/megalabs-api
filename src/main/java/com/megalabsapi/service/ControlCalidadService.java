@@ -1,7 +1,7 @@
 package com.megalabsapi.service;
 
 import com.megalabsapi.dto.EstudioClinicoDTO;
-import com.megalabsapi.model.entity.Control_Calidad;
+
 import java.sql.Date;
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.megalabsapi.repository;
 
-import com.megalabsapi.model.entity.Entrevista;
+import com.megalabsapi.entity.Entrevista;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

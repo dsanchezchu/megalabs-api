@@ -1,0 +1,38 @@
+package com.megalabsapi.entity;
+
+import com.megalabsapi.enums.PagoStatus;
+import com.megalabsapi.enums.PaymentMethod;
+import lombok.Data;
+import jakarta.persistence.*;
+import java.sql.Date;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import java.util.List;
+
+@Data
+@Entity
+@Table(name = "pago")
+public class Pago {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id_Pago")
+    private Integer idPago;
+
+    @Column(name = "Monto_Total", nullable = false)
+    private Double montoTotal;
+
+    @Column(name = "Fecha_Pago", nullable = false)
+    private Date fechaPago;
+
+    @Column(name = "Metodo_Pago", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod metodoPago;
+
+    @Column(name = "Estado", nullable = false, length = 20)
+    @Enumerated(EnumType.STRING)
+    private PagoStatus estado;
+
+    // Relación con Venta
+    @OneToMany(mappedBy = "pago", cascade = CascadeType.ALL)
+    private List<Venta> ventas;
+}

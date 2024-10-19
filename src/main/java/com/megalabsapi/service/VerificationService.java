@@ -1,7 +1,7 @@
 package com.megalabsapi.model.service;
 
-import com.megalabsapi.model.entity.Representante;
-import com.megalabsapi.model.entity.VerificationCode;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.entity.VerificationCode;
 
 public interface VerificationService {
     String generateVerificationCode();

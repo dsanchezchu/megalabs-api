@@ -1,6 +1,6 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.model.entity.Entrevista;
+import com.megalabsapi.entity.Entrevista;
 import com.megalabsapi.repository.EntrevistaRepository;
 import com.megalabsapi.service.EntrevistaService;
 

@@ -1,10 +1,8 @@
 package com.megalabsapi.api;
 
 import com.megalabsapi.dto.EstudioClinicoDTO;
-import com.megalabsapi.model.entity.Control_Calidad;
 import com.megalabsapi.service.ControlCalidadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;

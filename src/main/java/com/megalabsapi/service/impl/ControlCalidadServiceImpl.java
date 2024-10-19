@@ -1,7 +1,7 @@
 package com.megalabsapi.service.impl;
 
 import com.megalabsapi.dto.EstudioClinicoDTO;
-import com.megalabsapi.model.entity.Control_Calidad;
+import com.megalabsapi.entity.Control_Calidad;
 import com.megalabsapi.repository.ControlCalidadRepository;
 import com.megalabsapi.service.ControlCalidadService;
 import org.springframework.beans.factory.annotation.Autowired;

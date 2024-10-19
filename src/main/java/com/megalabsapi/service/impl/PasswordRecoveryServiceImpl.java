@@ -1,10 +1,10 @@
 package com.megalabsapi.model.service.impl;
 
-import com.megalabsapi.model.entity.PasswordRecoveryToken;
-import com.megalabsapi.model.entity.Representante;
-import com.megalabsapi.model.mapper.RecoverPasswordMapper;
-import com.megalabsapi.model.repository.PasswordRecoveryTokenRepository;
-import com.megalabsapi.model.repository.RepresentanteRepository;
+import com.megalabsapi.entity.PasswordRecoveryToken;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.mapper.RecoverPasswordMapper;
+import com.megalabsapi.repository.PasswordRecoveryTokenRepository;
+import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.model.service.PasswordRecoveryService;
 import com.megalabsapi.model.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

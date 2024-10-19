@@ -1,13 +1,11 @@
 package com.megalabsapi.model.service.impl;
 
-import com.megalabsapi.model.dto.LoginRequestDTO;
-import com.megalabsapi.model.dto.LoginResponseDTO;
-import com.megalabsapi.model.entity.Representante;
-import com.megalabsapi.model.mapper.LoginMapper;
-import com.megalabsapi.model.mapper.RepresentanteMapper;
-import com.megalabsapi.model.repository.RepresentanteRepository;
+import com.megalabsapi.dto.LoginRequestDTO;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.mapper.LoginMapper;
+import com.megalabsapi.mapper.RepresentanteMapper;
+import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.model.service.RepresentanteService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

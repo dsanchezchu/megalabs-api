@@ -1,7 +1,7 @@
 package com.megalabsapi.api;
 
 import com.megalabsapi.dto.EntrevistaDTO;
-import com.megalabsapi.model.entity.Entrevista;
+import com.megalabsapi.entity.Entrevista;
 import com.megalabsapi.repository.EntrevistaRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

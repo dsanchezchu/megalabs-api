@@ -1,6 +1,6 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.model.entity.Entrega_Muestra;
+import com.megalabsapi.entity.Entrega_Muestra;
 import com.megalabsapi.repository.EntregaMuestraRepository;
 import com.megalabsapi.service.AdminEntregaMuestraService;
 import org.springframework.beans.factory.annotation.Autowired;
