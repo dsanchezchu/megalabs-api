@@ -26,63 +26,6 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
     //Depende de 1 o más repositorios
     private final EntregaMuestraRepository entregaMuestraRepository;
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<Entrega_Muestra> getAll() {
-        //Metodos propipos de repositorio
-        return entregaMuestraRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Page<Entrega_Muestra> paginate(Pageable pageable) {
-        return entregaMuestraRepository.findAll(pageable);
-    }
-
-    @Override
-    public List<Entrega_Muestra> findByFecha(Date fecha) {
-        return entregaMuestraRepository.findByFecha(fecha);
-    }
-
-
-
-    @Transactional
-    @Override
-    public Entrega_Muestra create(Entrega_Muestra entregaMuestra) {
-        entregaMuestra.setCreatedAt(LocalDateTime.now());
-        return entregaMuestraRepository.save(entregaMuestra);
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public Entrega_Muestra findById(Integer id) {
-        return entregaMuestraRepository.findById(id).orElseThrow(()-> new RuntimeException("Entrega-Muestra no funciona"));
-    }
-
-    @Transactional
-    @Override
-    public Entrega_Muestra update(Integer id, Entrega_Muestra updateEntregaMuestra) {
-        Entrega_Muestra entregaMuestraFromDB = findById(id);
-        entregaMuestraFromDB.setUpdatedAt(LocalDateTime.now());
-        entregaMuestraFromDB.setLugar(updateEntregaMuestra.getLugar());
-        entregaMuestraFromDB.setFecha(updateEntregaMuestra.getFecha());
-        entregaMuestraFromDB.setEstado(updateEntregaMuestra.getEstado());
-        entregaMuestraFromDB.setProducto(updateEntregaMuestra.getProducto());
-        entregaMuestraFromDB.setCliente(updateEntregaMuestra.getCliente());
-        return entregaMuestraRepository.save(entregaMuestraFromDB);
-    }
-
-    @Transactional
-    @Override
-    public void delete(Integer id) {
-        Entrega_Muestra entregaMuestra = findById(id);
-        entregaMuestraRepository.delete(entregaMuestra);
-    }
-
-    @Override
-    public List<Entrega_Muestra> findByClienteRuc(String RUC) {
-        return entregaMuestraRepository.findByClienteRuc(RUC);
-    }
 
     @Override
     public List<EntregaMuestraDTO> obtenerEntregasPorCliente(String ruc) {
@@ -91,12 +34,16 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
         // Convertir la lista de Entrega_Muestra a EntregaMuestraDTO
         return entregas.stream()
                 .map(entrega -> new EntregaMuestraDTO(
-                        entrega.getIdEntrega(),
+                        entrega.getId(),
                         entrega.getLugar(),
                         entrega.getFecha(),
                         entrega.getEstado().name() // Usamos name() para obtener el String del Enum
                 ))
                 .collect(Collectors.toList());
     }
+
+
+
+
 
 }
