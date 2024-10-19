@@ -1,6 +1,7 @@
 -- Insertar en la tabla laboratorio (solo un laboratorio permitido)
 INSERT INTO laboratorio (RUC, NRM_Registro_Sanitario, Direccion, Telefono)
-VALUES ('12345678901', 'NRM-001', 'Av. Ejemplo 123', '987654321');
+VALUES ('12345678901', 'NRM-001', 'Av. Ejemplo 123', '987654321')
+ON CONFLICT (RUC) DO NOTHING;
 
 -- Insertar en la tabla cliente
 INSERT INTO cliente (RUC, Nombre, Licencia, Especializacion)

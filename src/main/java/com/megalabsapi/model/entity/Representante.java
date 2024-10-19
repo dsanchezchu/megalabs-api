@@ -2,6 +2,9 @@ package com.megalabsapi.model.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;
+
+import java.util.Date;
+
 @Data
 @Entity
 @Table(name = "representante")
@@ -19,4 +22,14 @@ public class Representante {
     @ManyToOne
     @JoinColumn(name = "Laboratorio_RUC", referencedColumnName = "RUC", foreignKey = @ForeignKey(name = "fk_representante_laboratorio"))
     private Laboratorio laboratorio;
+
+    @Column(name = "Contraseña", nullable = false)
+    private String contraseña;
+
+    @Column(name = "intentos", nullable = false)
+    private int intentosFallidos;
+
+    @Column(name = "email", nullable = false)
+    private String email;
+
 }
