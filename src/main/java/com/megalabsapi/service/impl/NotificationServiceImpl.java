@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service.impl;
+package com.megalabsapi.service.impl;
 
 import com.megalabsapi.model.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;

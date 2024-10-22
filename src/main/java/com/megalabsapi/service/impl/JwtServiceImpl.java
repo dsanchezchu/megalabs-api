@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service.impl;
+package com.megalabsapi.service.impl;
 
 import com.megalabsapi.model.service.JwtService;
 import io.jsonwebtoken.Claims;

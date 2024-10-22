@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service;
+package com.megalabsapi.service;
 
 import com.megalabsapi.entity.Representante;
 import com.megalabsapi.entity.VerificationCode;

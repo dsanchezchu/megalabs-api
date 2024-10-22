@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service.impl;
+package com.megalabsapi.service.impl;
 
 import com.megalabsapi.entity.LoginAttempt;
 import com.megalabsapi.entity.Representante;

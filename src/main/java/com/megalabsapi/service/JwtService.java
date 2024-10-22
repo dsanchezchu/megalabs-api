@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service;
+package com.megalabsapi.service;
 
 public interface JwtService {
     String generateToken(String username);

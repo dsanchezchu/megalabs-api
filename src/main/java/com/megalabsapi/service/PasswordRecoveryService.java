@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service;
+package com.megalabsapi.service;
 
 import java.io.UnsupportedEncodingException;
 

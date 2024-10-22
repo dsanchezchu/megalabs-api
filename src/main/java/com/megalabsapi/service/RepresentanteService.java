@@ -1,4 +1,4 @@
-package com.megalabsapi.model.service;
+package com.megalabsapi.service;
 
 import com.megalabsapi.dto.LoginRequestDTO;
 import com.megalabsapi.entity.Representante;
