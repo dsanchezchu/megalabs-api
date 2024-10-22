@@ -5,7 +5,7 @@ import com.megalabsapi.entity.Representante;
 import com.megalabsapi.mapper.LoginMapper;
 import com.megalabsapi.mapper.RepresentanteMapper;
 import com.megalabsapi.repository.RepresentanteRepository;
-import com.megalabsapi.model.service.RepresentanteService;
+import com.megalabsapi.service.RepresentanteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

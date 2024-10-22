@@ -4,8 +4,8 @@ import com.megalabsapi.entity.LoginAttempt;
 import com.megalabsapi.entity.Representante;
 import com.megalabsapi.repository.LoginAttemptRepository;
 import com.megalabsapi.repository.RepresentanteRepository;
-import com.megalabsapi.model.service.NotificationService;
-import com.megalabsapi.model.service.LoginAttemptService;
+import com.megalabsapi.service.NotificationService;
+import com.megalabsapi.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

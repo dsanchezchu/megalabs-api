@@ -4,8 +4,8 @@ import com.megalabsapi.entity.Representante;
 import com.megalabsapi.entity.VerificationCode;
 import com.megalabsapi.mapper.VerificationCodeMapper;
 import com.megalabsapi.repository.VerificationCodeRepository;
-import com.megalabsapi.model.service.NotificationService;
-import com.megalabsapi.model.service.VerificationService;
+import com.megalabsapi.service.NotificationService;
+import com.megalabsapi.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

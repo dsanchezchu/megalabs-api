@@ -1,6 +1,6 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.model.service.JwtService;
+import com.megalabsapi.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,6 +1,6 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.model.service.NotificationService;
+import com.megalabsapi.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
