@@ -17,8 +17,9 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())  // Desactivar CSRF
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()  // Permitir acceso a los endpoints de autenticación
-                        .anyRequest().authenticated()  // Proteger el resto de los endpoints
+                        .requestMatchers("/auth/**").permitAll()  // Only matches relative to context-path
+                        .requestMatchers("/api/v1/auth/**").permitAll()  // Ensure full context path is permitted
+                        .anyRequest().authenticated()
                 );
 
         return http.build();

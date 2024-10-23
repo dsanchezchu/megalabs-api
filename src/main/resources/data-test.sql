@@ -10,10 +10,10 @@ VALUES
     ('98354231025', 'Ana Lopez', 'LIC-002', 'Clínica');
 
 -- Insertar en la tabla representante
-INSERT INTO representante (DNI, Nombre, Sede_Asignada, Laboratorio_RUC)
+INSERT INTO representante (DNI, Nombre, Sede_Asignada, Laboratorio_RUC, Contraseña, Intentos, Email)
 VALUES
-    ('12345678', 'Maria Gomez', 'Sede Central', '12345678901'),
-    ('87654321', 'Carlos Ramirez', 'Sede Norte', '12345678901');
+    ('12345678', 'Maria Gomez', 'Sede Central', '12345678901', 'password123', 0, 'maria.gomez@example.com'),
+    ('87654321', 'Carlos Ramirez', 'Sede Norte', '12345678901', 'password123', 0, 'carlos.ramirez@example.com');
 
 -- Insertar en la tabla producto
 INSERT INTO producto (ID_Producto, Fecha_Venta, Nombre, Stock)
@@ -40,8 +40,9 @@ VALUES
     ('2024-09-27', 'Eficiente', 'EN_PRUEBAS', 2, '98354231025' );
 
 -- Insertar en la tabla entrega_muestra
-INSERT INTO entrega_Muestra (Fecha, Lugar, Estado, created_at,updated_at, Cliente_RUC, Producto_ID_Producto)
-VALUES ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '2024-09-25 14:32:00', '2024-09-27 09:00:00', '98354231024', 1);
+INSERT INTO entrega_muestra (Fecha, Lugar, Estado, created_at, updated_at, Cliente_RUC, Producto_ID_Producto)
+VALUES
+    ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '2024-09-25 14:32:00', '2024-09-27 09:00:00', '98354231024', 1);
 
 -- Insertar en la tabla pago
 INSERT INTO pago (Monto_Total, Fecha_Pago, Metodo_Pago, Estado)
