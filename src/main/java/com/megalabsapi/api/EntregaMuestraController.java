@@ -76,7 +76,7 @@ public class EntregaMuestraController {
     
     
 
-    @GetMapping("/{ruc}")
+    @GetMapping("/ruc/{ruc}")
     public ResponseEntity<List<EntregaMuestraDTO>> obtenerEntregasPorCliente(@PathVariable String ruc) {
         List<EntregaMuestraDTO> entregas = entregaMuestraService.obtenerEntregasPorCliente(ruc);
         return ResponseEntity.ok(entregas);
