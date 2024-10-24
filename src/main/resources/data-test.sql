@@ -20,6 +20,13 @@ VALUES
     (1, '2024-09-27', 'Producto A', 'EN_STOCK'),
     (2, '2024-09-27', 'Producto B', 'EN_STOCK');
 
+-- Insertar en la tabla formula_desarrollada relacionada con los productos existentes
+INSERT INTO formula_desarrollada (nombre, beneficios, ingredientes_clave, diferencias, fecha_desarrollo, producto_id)
+VALUES
+    ('Fórmula Mejorada A', 'Mejora la absorción y efectividad del Producto A', 'Ingrediente X, Ingrediente Y', 'Nueva presentación y mejor biodisponibilidad', '2024-09-25', 1),
+    ('Fórmula Mejorada B', 'Reduce los efectos secundarios del Producto B', 'Ingrediente A, Ingrediente B', 'Reducción de dosis sin perder efectividad', '2024-09-25', 2);
+
+
 -- Insertar en la tabla categoria_producto
 INSERT INTO categoria_producto (ID_Categoria, Nombre_Categoria, Producto_ID_Producto)
 VALUES

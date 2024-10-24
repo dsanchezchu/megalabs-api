@@ -24,5 +24,4 @@ public class Producto {
     @Enumerated(EnumType.STRING)
     private StockStatus stock;
 
-
 }
