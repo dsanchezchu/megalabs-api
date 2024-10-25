@@ -51,6 +51,12 @@ VALUES
     ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '98354231024', 1),
     ('2024-09-27', 'Clínica Ejemplo', 'ENTREGADO', '98354231025', 2);
 
+-- Insertar en la tabla no_conformidad asociada a una entrega de muestra
+INSERT INTO no_conformidad (descripcion_problema, fecha_deteccion, causa_raiz, acciones_correctivas, resultado_seguimiento, critico, entrega_muestra_id)
+VALUES
+    ('Producto dañado durante el transporte', '2024-09-28', 'Transporte inadecuado', 'Mejorar el embalaje', 'Se han implementado cambios en el embalaje', TRUE, 1),
+    ('Defecto en la formulación', '2024-09-29', 'Error en el proceso de producción', 'Ajustar los parámetros de producción', 'Se ajustaron los parámetros de producción y se evitó el defecto', FALSE, 2);
+
 -- Insertar en la tabla pago
 INSERT INTO pago (Monto_Total, Fecha_Pago, Metodo_Pago, Estado)
 VALUES
