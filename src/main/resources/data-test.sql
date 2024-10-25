@@ -3,10 +3,10 @@ INSERT INTO laboratorio (RUC, NRM_Registro_Sanitario, Direccion, Telefono)
 VALUES ('12345678901', 'NRM-001', 'Av. Ejemplo 123', '987654321');
 
 -- Insertar en la tabla cliente
-INSERT INTO cliente (RUC, Nombre, Licencia, Especializacion)
+INSERT INTO cliente (RUC, Nombre, Licencia, Especializacion,Correo)
 VALUES
-    ('98354231024', 'Juan Perez', 'LIC-001', 'Farmacia'),
-    ('98354231025', 'Ana Lopez', 'LIC-002', 'Clínica');
+    ('98354231024', 'Juan Perez', 'LIC-001', 'Farmacia','diengoanc280@gmail.com'),
+    ('98354231025', 'Ana Lopez', 'LIC-002', 'Clínica','diego270@outlook.com');
 
 -- Insertar en la tabla representante
 INSERT INTO representante (DNI, Nombre, Sede_Asignada, Laboratorio_RUC)

@@ -22,7 +22,9 @@ public class Cliente {
     @Column(name = "Especializacion", nullable = false)
     private String especializacion;
 
+    @Column(name = "Correo", nullable = false)
+    private String correo;
 //     Relación uno a muchos con Entrega_Muestra
 //    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Entrega_Muestra> entregasMuestra;
+//    private List<Encorreotrega_Muestra> entregasMuestra;
 }
