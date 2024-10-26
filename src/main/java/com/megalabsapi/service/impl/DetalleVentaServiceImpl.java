@@ -42,6 +42,8 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
         model.put("clienteNombre", detalleVenta.getCliente().getNombre());
         model.put("clienteRuc", detalleVenta.getCliente().getRuc());
         model.put("productoId",detalleVenta.getProducto().getIdProducto());
+        model.put("productoNombre", detalleVenta.getProducto().getNombre());
+        model.put("montoTotal",detalleVenta.getVenta().getPago().getMontoTotal());
         model.put("cantidad", detalleVenta.getCantidad());
         model.put("precio", detalleVenta.getPrecio());
 

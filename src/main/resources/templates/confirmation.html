@@ -7,6 +7,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f0f0f0;
         }
         .container {
             border: 1px solid #ccc;
@@ -36,6 +37,12 @@
             font-size: 12px;
             color: #888;
         }
+        .footer img {
+            max-width: 100%;
+            height: 120px;
+            user-select: none; /* Evita la selección de la imagen */
+            pointer-events: none; /* Deshabilita cualquier interacción */
+        }
     </style>
 </head>
 <body>
@@ -43,7 +50,7 @@
     <div class="header">
         <h1>Confirmación de Orden - Megalabs</h1>
         <p>Gracias por su compra, <span th:text="${clienteNombre}"></span>!</p>
-        <p>De correo:, <span th:text="${clienteCorreo}"></span>!</p>
+        <p>De correo: <span th:text="${clienteCorreo}"></span></p>
     </div>
 
     <div class="order-details">
@@ -65,10 +72,20 @@
                 <th>Precio:</th>
                 <td th:text="${precio}"></td>
             </tr>
+            <tr>
+                <th>Nombre de Producto:</th>
+                <td th:text="${productoNombre}"></td>
+            </tr>
+            <tr>
+                <th>Monto Total:</th>
+                <td th:text="${montoTotal}"></td>
+            </tr>
+
         </table>
     </div>
 
     <div class="footer">
+        <img src="https://i.imgur.com/y9fvifd.png" alt="Megalabs Logo">
         <p>© 2024 Megalabs. Todos los derechos reservados.</p>
     </div>
 </div>
