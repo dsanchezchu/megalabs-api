@@ -1,6 +1,6 @@
 package com.megalabsapi.repository;
 
-import com.megalabsapi.model.entity.Detalle_Venta;
+import com.megalabsapi.entity.Detalle_Venta;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

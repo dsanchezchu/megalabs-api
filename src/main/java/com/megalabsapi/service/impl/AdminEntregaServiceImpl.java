@@ -1,8 +1,8 @@
-package com.megalabsapi.service.impl;
+//package com.megalabsapi.service.impl;
 
 import com.megalabsapi.entity.Entrega_Muestra;
 import com.megalabsapi.repository.EntregaMuestraRepository;
-import com.megalabsapi.service.AdminEntregaMuestraService;
+//import com.megalabsapi.service.AdminEntregaMuestraService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Service
-public class AdminEntregaServiceImpl implements AdminEntregaMuestraService {
-
+//@Service
+//public class AdminEntregaServiceImpl implements AdminEntregaMuestraService {
+    /*
     @Autowired
     private EntregaMuestraRepository entregaMuestraRepository;
 
@@ -78,4 +78,4 @@ public class AdminEntregaServiceImpl implements AdminEntregaMuestraService {
         Entrega_Muestra entregaMuestra = findById(id);
         entregaMuestraRepository.delete(entregaMuestra);
     }
-}
+} */

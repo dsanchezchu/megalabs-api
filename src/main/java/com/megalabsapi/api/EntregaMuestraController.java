@@ -1,7 +1,7 @@
 package com.megalabsapi.api;
 
 import com.megalabsapi.dto.EntregaMuestraDTO;
-import com.megalabsapi.model.entity.Entrega_Muestra;
+import com.megalabsapi.entity.Entrega_Muestra;
 
 import com.megalabsapi.service.EntregaMuestraService;
 import lombok.RequiredArgsConstructor;
