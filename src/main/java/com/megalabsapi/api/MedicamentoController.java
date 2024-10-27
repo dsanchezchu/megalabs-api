@@ -1,6 +1,6 @@
 package com.megalabsapi.api;
 
-import com.megalabsapi.entity.Medicamento;
+import com.megalabsapi.model.entity.Medicamento;
 import com.megalabsapi.service.impl.MedicamentoService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/medicamentos")
+@RequestMapping("/medicamentos")
 public class MedicamentoController {
     @Autowired
     private MedicamentoService medicamentoService;

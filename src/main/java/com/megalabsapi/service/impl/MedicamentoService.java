@@ -1,6 +1,6 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.entity.Medicamento;
+import com.megalabsapi.model.entity.Medicamento;
 import com.megalabsapi.repository.MedicamentoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
