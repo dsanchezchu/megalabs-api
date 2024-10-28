@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -156,7 +157,7 @@ public class AuthController {
         return ResponseEntity.ok("Verificación exitosa. Bienvenido al sistema");
     }
 
-
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/suspicious-activities")
     public ResponseEntity<List<LoginAttempt>> getSuspiciousActivities(@RequestParam String representanteDni) {
         List<LoginAttempt> suspiciousAttempts = loginAttemptService.getSuspiciousAttemptsByRepresentanteDni(representanteDni);
@@ -168,6 +169,7 @@ public class AuthController {
         return ResponseEntity.ok(suspiciousAttempts);
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         if (authentication != null) {
@@ -175,6 +177,7 @@ public class AuthController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PostMapping("/actualizar-credenciales")
     public ResponseEntity<String> actualizarCredenciales(
             @RequestHeader("Authorization") String token,

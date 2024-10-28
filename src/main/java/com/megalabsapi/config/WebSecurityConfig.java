@@ -26,7 +26,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @RequiredArgsConstructor
 @EnableWebSecurity
 @EnableMethodSecurity // Importante para anotaciones @PreAuthorize
-public class WebSecurityConfig {
+public class WebSecurityConfig{
 
     private final TokenProvider tokenProvider;
     private final JWTFilter jwtRequestFilter;
@@ -42,6 +42,8 @@ public class WebSecurityConfig {
                         // Permitir acceso a los endpoints de registro y login sin autenticación
                         .requestMatchers(antMatcher("/auth/login")).permitAll()
                         .requestMatchers(antMatcher("/auth/register")).permitAll()
+                        .requestMatchers(antMatcher("/auth/recover-password")).permitAll()
+                        .requestMatchers(antMatcher("/auth/verify-code")).permitAll()
                         .requestMatchers("/api/v1/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**").permitAll()
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
