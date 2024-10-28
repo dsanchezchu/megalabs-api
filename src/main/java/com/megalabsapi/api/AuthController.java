@@ -12,6 +12,7 @@ import com.megalabsapi.repository.VerificationCodeRepository;
 import com.megalabsapi.security.TokenProvider;
 import com.megalabsapi.service.LoginAttemptService;
 import com.megalabsapi.service.NotificationService;
+import com.megalabsapi.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,8 @@ public class AuthController {
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
+    private UserService userService;
+    @Autowired
     private VerificationCodeRepository verificationCodeRepository;
     @Autowired
     private LoginAttemptService loginAttemptService;
@@ -55,59 +58,24 @@ public class AuthController {
     // Endpoint para iniciar sesión
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
         try {
-            Representante representante = representanteService.autenticarUsuario(loginRequestDTO);
-
-            // Crear un objeto Authentication
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    representante.getDni(), null, representante.getRole().getAuthorities());
-
-            // Generar el token usando Authentication
-            String token = tokenProvider.createAccessToken(authentication);
-
-            LoginResponseDTO responseDTO = new LoginResponseDTO("Inicio de sesión exitoso", representante.getNombre(), token);
-            return ResponseEntity.ok(responseDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponseDTO("Error: Datos inválidos", null, null));
+            AuthResponseDTO authResponse = userService.login(loginDTO);
+            return ResponseEntity.ok(authResponse);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("Error inesperado: " + e.getMessage(), null, null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Error: Datos inválidos");
         }
     }
+
 
 
     // Endpoint para registrar un nuevo representante
     @PostMapping("/register")
     public ResponseEntity<UserProfileDTO> register(@RequestBody UserRegistrationDTO registrationDTO) {
         try {
-            Representante nuevoRepresentante = new Representante();
-            nuevoRepresentante.setDni(registrationDTO.getDni());
-            nuevoRepresentante.setEmail(registrationDTO.getEmail());
-            nuevoRepresentante.setNombre(registrationDTO.getNombre());
-            nuevoRepresentante.setSedeAsignada(registrationDTO.getSedeAsignada());
-
-            // Convertir el roleName (String) a ERole y asignarlo al Representante
-            ERole roleEnum = ERole.valueOf(registrationDTO.getRoleName());
-
-            // Obtener el objeto Role desde la base de datos
-            Role role = roleRepository.findByName(roleEnum)
-                    .orElseThrow(() -> new RoleNotFoundException("Role not found"));
-
-            nuevoRepresentante.setRole(role);
-
-            representanteRepository.save(nuevoRepresentante);
-
-            UserProfileDTO profileDTO = new UserProfileDTO(
-                    nuevoRepresentante.getDni(),
-                    nuevoRepresentante.getEmail(),
-                    nuevoRepresentante.getNombre(),
-                    nuevoRepresentante.getSedeAsignada(),
-                    nuevoRepresentante.getRole().getName()
-            );
-
+            UserProfileDTO profileDTO = userService.registerRepresentante(registrationDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(profileDTO);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Error por rol inválido
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

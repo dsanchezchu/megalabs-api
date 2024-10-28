@@ -15,7 +15,9 @@ import com.megalabsapi.mapper.UserMapper;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.repository.RoleRepository;
 import com.megalabsapi.security.TokenProvider;
+import com.megalabsapi.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,7 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl {
+@Slf4j
+public class UserServiceImpl implements UserService {
 
     private final RepresentanteRepository representanteRepository;
     private final RoleRepository roleRepository;
@@ -43,6 +46,7 @@ public class UserServiceImpl {
     @Transactional
     public UserProfileDTO registerRepresentante(UserRegistrationDTO registrationDTO) {
         if (representanteRepository.existsByDni(registrationDTO.getDni())) {
+            log.info("DNI already exists: {}", registrationDTO.getDni());
             throw new BadRequestException(DNI_REGISTERED_ERROR);
         }
 
@@ -53,6 +57,7 @@ public class UserServiceImpl {
         Representante representante = userMapper.toRepresentanteEntity(registrationDTO);
         representante.setRole(role);
 
+        log.info("Guardando nuevo representante con DNI: {}", registrationDTO.getDni());
         Representante savedRepresentante = representanteRepository.save(representante);
 
         return userMapper.toUserProfileDTO(savedRepresentante);
