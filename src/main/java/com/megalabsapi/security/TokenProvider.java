@@ -1,34 +1,97 @@
 package com.megalabsapi.security;
 
-import com.megalabsapi.entity.Representante;
-import com.megalabsapi.repository.RepresentanteRepository;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.megalabsapi.exception.RoleNotFoundException;
+import com.megalabsapi.repository.UserRepository;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
 
+import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
-
+@RequiredArgsConstructor
+@Component
 public class TokenProvider {
+    private final UserRepository userRepository;
+
+    @Value("${jwt.secret}")
+    private String jwtSecret;
+
+    @Value("${jwt.validity-in-seconds}")
+    private long jwtValidityInSeconds;
+
+    private Key key;
+    private JwtParser jwtParser;
+
+    @PostConstruct
+    public void init() {
+        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        jwtParser = Jwts
+                .parserBuilder()
+                .setSigningKey(key)
+                .build();
+    }
+
+    // Generar tokens JWT
     public String createAccessToken(Authentication authentication) {
+        // Obtener el email del usuario autenticado desde el principal
         String email = authentication.getName();
 
-        // Cambia esto si tu método para encontrar el usuario es diferente
-        User user = userRepository.findByEmail(email)
+        // Buscar el usuario en la base de datos usando el email
+        com.hampcode.model.entity.User user = userRepository
+                .findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el email: " + email));
 
-        String role = authentication.getAuthorities().stream()
+        // Obtener el rol del usuario
+        String role = authentication
+                .getAuthorities()
+                .stream()
                 .findFirst()
-                .orElseThrow(() -> new RuntimeException("Rol no encontrado"))
+                .orElseThrow(RoleNotFoundException::new)
                 .getAuthority();
 
-        return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim("role", role)
+        // Crear el token JWT con solo el rol y el sujeto
+        return Jwts
+                .builder()
+                .setSubject(authentication.getName())  // El sujeto será el email o el nombre de usuario
+                .claim("role", role)  // Solo se incluye el rol como claim
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(new Date(System.currentTimeMillis() + jwtValidityInSeconds * 1000))
                 .compact();
+    }
+
+    // Obtener autenticación
+    public Authentication getAuthentication(String token) {
+        Claims claims = jwtParser.parseClaimsJws(token).getBody();
+
+        String role = claims.get("role").toString();
+
+        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
+
+        // El principal será el email del usuario que viene en el subject del JWT
+        User principal = new User(claims.getSubject(), "", authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    // Validar tokens JWT
+    public boolean validateToken(String token) {
+        try {
+            jwtParser.parseClaimsJws(token);
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
