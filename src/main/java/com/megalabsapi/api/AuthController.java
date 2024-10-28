@@ -23,8 +23,7 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.web.bind.annotation.*;
 import com.megalabsapi.entity.Representante;
 import com.megalabsapi.service.RepresentanteService;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -43,10 +42,8 @@ public class AuthController {
     private RepresentanteRepository representanteRepository;
     @Autowired
     private NotificationService notificationService;
-
     @Autowired
     private RoleRepository roleRepository;
-
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
     @Autowired
