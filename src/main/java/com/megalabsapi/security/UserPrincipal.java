@@ -1,5 +1,6 @@
 package com.megalabsapi.security;
-import com.hampcode.model.entity.User;
+
+import com.megalabsapi.entity.Representante;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,28 +10,28 @@ import java.util.Collections;
 
 public class UserPrincipal implements UserDetails {
 
-    private Integer id;
+    private String dni;
     private String email;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Integer id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
-        this.id = id;
+    public UserPrincipal(String dni, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+        this.dni = dni;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
     }
 
-    public static UserPrincipal create(User user) {
-        // Asegúrate de que el rol se asigna correctamente
-        String roleName = user.getRole().getName().name(); // O usar getName() si es un String
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + roleName); // Agrega el prefijo "ROLE_"
+    public static UserPrincipal create(Representante representante) {
+        // Obtener y asignar el rol del representante
+        String roleName = representante.getRole() != null ? representante.getRole().getName().name() : "REPRESENTANTE";
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + roleName);
 
         return new UserPrincipal(
-                user.getId(),
-                user.getEmail(),
-                user.getPassword(),
-                Collections.singletonList(authority) // Lista con un solo rol
+                representante.getDni(),
+                representante.getEmail(),
+                representante.getContraseña(),
+                Collections.singletonList(authority)
         );
     }
 
@@ -46,7 +47,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return dni; // Cambiado para usar DNI como identificador
     }
 
     @Override
@@ -69,3 +70,4 @@ public class UserPrincipal implements UserDetails {
         return true;
     }
 }
+

@@ -7,7 +7,6 @@ import com.megalabsapi.repository.PasswordRecoveryTokenRepository;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.service.PasswordRecoveryService;
 import com.megalabsapi.service.NotificationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -21,50 +20,53 @@ import java.util.UUID;
 @Service
 public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
 
-    @Autowired
-    private RepresentanteRepository representanteRepository;
+    private final RepresentanteRepository representanteRepository;
+    private final PasswordRecoveryTokenRepository tokenRepository;
+    private final NotificationService notificationService;
+    private final RecoverPasswordMapper recoverPasswordMapper;
 
-    @Autowired
-    private PasswordRecoveryTokenRepository tokenRepository;
-
-    @Autowired
-    private NotificationService notificationService;
-
-    @Autowired
-    private RecoverPasswordMapper recoverPasswordMapper;  // Inyectamos el mapper
-
-    // Inyectamos la URL base desde las propiedades del sistema
     @Value("${app.base-url}")
     private String baseUrl;
 
+    @Value("${token.expiration.time}")
+    private long tokenExpirationTime;  // En segundos, configurable en properties
+
+    public PasswordRecoveryServiceImpl(RepresentanteRepository representanteRepository,
+                                       PasswordRecoveryTokenRepository tokenRepository,
+                                       NotificationService notificationService,
+                                       RecoverPasswordMapper recoverPasswordMapper) {
+        this.representanteRepository = representanteRepository;
+        this.tokenRepository = tokenRepository;
+        this.notificationService = notificationService;
+        this.recoverPasswordMapper = recoverPasswordMapper;
+    }
+
     @Override
     public void createPasswordRecoveryToken(String email) throws UnsupportedEncodingException {
-        // Buscar al representante por correo electrónico
-        Representante representante = representanteRepository.findByEmail(email);
-        if (representante == null) {
-            throw new RuntimeException("Correo electrónico no encontrado");
-        }
+        // Buscar al representante por correo electrónico usando Optional para manejar el caso de no encontrado
+        Representante representante = representanteRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Correo electrónico no encontrado"));
 
         // Generar el token único
         String token = UUID.randomUUID().toString();
 
-        // Crear el objeto `PasswordRecoveryToken`
+        // Crear y configurar el objeto `PasswordRecoveryToken`
         PasswordRecoveryToken recoveryToken = new PasswordRecoveryToken();
         recoveryToken.setToken(token);
         recoveryToken.setRepresentante(representante);
-        recoveryToken.setExpiryDate(Timestamp.from(Instant.now().plusSeconds(3600))); // 1 hora de expiración
+        recoveryToken.setExpiryDate(Timestamp.from(Instant.now().plusSeconds(tokenExpirationTime))); // Token configurable
 
         // Guardar el token en la base de datos
         tokenRepository.save(recoveryToken);
 
-        // Codificar el token para la URL
+        // Codificar el token para la URL de recuperación
         String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
         String recoveryUrl = baseUrl + "/recover-password?token=" + encodedToken;
 
-        // Crear el mensaje con el nombre del usuario y el enlace de recuperación
+        // Crear el mensaje con el enlace de recuperación
         String message = String.format(
                 "Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s",
-                representante.getNombre(), recoveryUrl);  // Aquí se asegura que el enlace y el nombre del usuario están bien concatenados.
+                representante.getNombre(), recoveryUrl);
 
         // Enviar el correo de recuperación
         notificationService.sendRecoveryEmail(representante.getEmail(), message);

@@ -1,197 +1,105 @@
 package com.megalabsapi.service.impl;
 
-import com.hampcode.dto.AuthResponseDTO;
-import com.hampcode.dto.LoginDTO;
-import com.hampcode.dto.UserProfileDTO;
-import com.hampcode.dto.UserRegistrationDTO;
-import com.hampcode.exception.BadRequestException;
-import com.hampcode.exception.InvalidCredentialsException;
-import com.hampcode.exception.ResourceNotFoundException;
-import com.hampcode.exception.RoleNotFoundException;
-import com.hampcode.mapper.UserMapper;
-import com.hampcode.model.entity.Author;
-import com.hampcode.model.entity.Customer;
-import com.hampcode.model.entity.Role;
-import com.hampcode.model.entity.User;
-import com.hampcode.model.enums.ERole;
-import com.hampcode.repository.AuthorRepository;
-import com.hampcode.repository.CustomerRepository;
-import com.hampcode.repository.RoleRepository;
-import com.hampcode.repository.UserRepository;
-import com.hampcode.security.TokenProvider;
-import com.hampcode.service.UserService;
+import com.megalabsapi.dto.AuthResponseDTO;
+import com.megalabsapi.dto.LoginDTO;
+import com.megalabsapi.dto.UserProfileDTO;
+import com.megalabsapi.dto.UserRegistrationDTO;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.entity.Role;
+import com.megalabsapi.enums.ERole;
+import com.megalabsapi.exception.BadRequestException;
+import com.megalabsapi.exception.InvalidCredentialsException;
+import com.megalabsapi.exception.ResourceNotFoundException;
+import com.megalabsapi.exception.RoleNotFoundException;
+import com.megalabsapi.mapper.UserMapper;
+import com.megalabsapi.repository.RepresentanteRepository;
+import com.megalabsapi.repository.RoleRepository;
+import com.megalabsapi.security.TokenProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl {
 
-    private final UserRepository userRepository;
-    private final CustomerRepository customerRepository;
-    private final AuthorRepository authorRepository;
+    private final RepresentanteRepository representanteRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
+    private final AuthenticationManager authenticationManager;
+    private final TokenProvider tokenProvider;
 
-    private final AuthenticationManager authenticationManager; // Necesario para la autenticación
-    private final TokenProvider tokenProvider; // Necesario para la creación de tokens JWT
-
-    @Transactional
-    @Override
-    public UserProfileDTO registerCustomer(UserRegistrationDTO registrationDTO) {
-        return registerUserWithRole(registrationDTO, ERole.CUSTOMER);
-    }
+    private static final String DNI_REGISTERED_ERROR = "El DNI ya está registrado";
+    private static final String ROLE_NOT_FOUND_ERROR = "Rol no encontrado";
+    private static final String USER_NOT_FOUND_ERROR = "Usuario no encontrado con el DNI proporcionado";
+    private static final String INVALID_CREDENTIALS_ERROR = "Credenciales incorrectas";
 
     @Transactional
-    @Override
-    public UserProfileDTO registerAuthor(UserRegistrationDTO registrationDTO) {
-        return registerUserWithRole(registrationDTO, ERole.AUTHOR);
-    }
-
-    @Transactional
-    @Override
-    public AuthResponseDTO login(LoginDTO loginDTO) {
-        // Buscar el usuario por email
-        User user = userRepository.findByEmail(loginDTO.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el email: " + loginDTO.getEmail()));
-
-        // Verificar si la contraseña es correcta
-        if (!passwordEncoder.matches(loginDTO.getPassword(), user.getPassword())) {
-            throw new InvalidCredentialsException("Credenciales incorrectas");
+    public UserProfileDTO registerRepresentante(UserRegistrationDTO registrationDTO) {
+        if (representanteRepository.existsByDni(registrationDTO.getDni())) {
+            throw new BadRequestException(DNI_REGISTERED_ERROR);
         }
 
-        // Autenticar al usuario
+        Role role = roleRepository.findByName(ERole.REPRESENTANTE)
+                .orElseThrow(() -> new RoleNotFoundException(ROLE_NOT_FOUND_ERROR));
+
+        registrationDTO.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
+        Representante representante = userMapper.toRepresentanteEntity(registrationDTO);
+        representante.setRole(role);
+
+        Representante savedRepresentante = representanteRepository.save(representante);
+
+        return userMapper.toUserProfileDTO(savedRepresentante);
+    }
+
+    @Transactional
+    public AuthResponseDTO login(LoginDTO loginDTO) {
+        Representante representante = representanteRepository.findByDni(loginDTO.getDni())
+                .orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND_ERROR));
+
+        if (!passwordEncoder.matches(loginDTO.getPassword(), representante.getContraseña())) {
+            throw new InvalidCredentialsException(INVALID_CREDENTIALS_ERROR);
+        }
+
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), loginDTO.getPassword())
+                new UsernamePasswordAuthenticationToken(loginDTO.getDni(), loginDTO.getPassword())
         );
 
-        // Generar el token JWT usando el TokenProvider
         String token = tokenProvider.createAccessToken(authentication);
 
-        // Generar la respuesta de autenticación, con el rol correspondiente
-        AuthResponseDTO response = userMapper.toAuthResponseDTO(user, token);
-
-        // Retornar la respuesta
-        return response;
+        return userMapper.toAuthResponseDTO(representante, token);
     }
-
-
-    // Método genérico para registrar un usuario con un rol específico
-    private UserProfileDTO registerUserWithRole(UserRegistrationDTO registrationDTO, ERole roleEnum) {
-
-        // Verificar si el email ya está registrado o si ya existe un usuario con el mismo nombre y apellido
-        boolean emailExists = userRepository.existsByEmail(registrationDTO.getEmail());
-        boolean existsAsCustomer = customerRepository.existsByFirstNameAndLastName(registrationDTO.getFirstName(), registrationDTO.getLastName());
-        boolean existsAsAuthor = authorRepository.existsByFirstNameAndLastName(registrationDTO.getFirstName(), registrationDTO.getLastName());
-
-        if (emailExists) {
-            throw new UsernameNotFoundException("El email ya está registrado");
-        }
-
-        if (existsAsCustomer || existsAsAuthor) {
-            throw new BadRequestException("Ya existe un usuario con el mismo nombre y apellido");
-        }
-
-
-        // Asignar el rol del usuario
-        Role role = roleRepository.findByName(roleEnum)
-                .orElseThrow(() -> new RoleNotFoundException("Rol no encontrado"));
-
-        // Cifrar la contraseña
-        registrationDTO.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
-
-        // Convertir el DTO a una entidad User
-        User user = userMapper.toUserEntity(registrationDTO);
-        user.setRole(role); // Asignar el rol al usuario
-
-        // Asignar la entidad específica basada en el rol
-        if (roleEnum == ERole.CUSTOMER) {
-            // Crear un cliente
-            Customer customer = new Customer();
-            customer.setFirstName(registrationDTO.getFirstName());
-            customer.setLastName(registrationDTO.getLastName());
-            customer.setShippingAddress(registrationDTO.getShippingAddress());
-            customer.setCreatedAt(LocalDateTime.now());
-            customer.setUser(user);  // Enlazar el cliente con el usuario
-            user.setCustomer(customer);
-        } else if (roleEnum == ERole.AUTHOR) {
-            // Crear un autor
-            Author author = new Author();
-            author.setFirstName(registrationDTO.getFirstName());
-            author.setLastName(registrationDTO.getLastName());
-            author.setBio(registrationDTO.getBio());
-            author.setCreatedAt(LocalDateTime.now());
-            author.setUser(user);  // Enlazar el autor con el usuario
-            user.setAuthor(author);
-        }
-
-        // Guardar el usuario en la base de datos
-        User savedUser = userRepository.save(user);
-
-        // Convertir el usuario registrado a UserProfileDTO para la respuesta
-        return userMapper.toUserProfileDTO(savedUser);
-    }
-
 
     @Transactional
-    @Override
-    public UserProfileDTO updateUserProfile(Integer id, UserProfileDTO userProfileDTO) {
-        // Buscar el usuario por su ID
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+    public UserProfileDTO updateUserProfile(String dni, UserProfileDTO userProfileDTO) {
+        Representante representante = representanteRepository.findByDni(dni)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_ERROR));
 
-        // Verificar si ya existe un cliente o autor con el mismo nombre y apellido (excepto el usuario actual)
-        // La verificación se realiza excluyendo el usuario actual para permitir que actualice su propio perfil
-        // sin que se genere un conflicto de duplicidad en los nombres y apellidos.
-        boolean existsAsCustomer = customerRepository.existsByFirstNameAndLastNameAndUserIdNot(userProfileDTO.getFirstName(), userProfileDTO.getLastName(), id);
-        boolean existsAsAuthor = authorRepository.existsByFirstNameAndLastNameAndUserIdNot(userProfileDTO.getFirstName(), userProfileDTO.getLastName(), id);
-
-        if (existsAsCustomer || existsAsAuthor) {
-            throw new BadRequestException("Ya existe un usuario con el mismo nombre y apellido");
+        if (!representante.getEmail().equals(userProfileDTO.getEmail()) &&
+                representanteRepository.existsByEmail(userProfileDTO.getEmail())) {
+            throw new BadRequestException("El email ya está en uso");
         }
 
+        representante.setNombre(userProfileDTO.getNombre());
+        representante.setEmail(userProfileDTO.getEmail());
+        representante.setSedeAsignada(userProfileDTO.getSedeAsignada());
 
-        // Actualizar los campos específicos del perfil
-        if (user.getCustomer() != null) {
-            user.getCustomer().setFirstName(userProfileDTO.getFirstName());
-            user.getCustomer().setLastName(userProfileDTO.getLastName());
-            user.getCustomer().setShippingAddress(userProfileDTO.getShippingAddress());
-        }
+        Representante updatedRepresentante = representanteRepository.save(representante);
 
-        if (user.getAuthor() != null) {
-            user.getAuthor().setFirstName(userProfileDTO.getFirstName());
-            user.getAuthor().setLastName(userProfileDTO.getLastName());
-            user.getAuthor().setBio(userProfileDTO.getBio());
-        }
-
-        // Guardar los cambios en la base de datos
-        User updatedUser = userRepository.save(user);
-
-        // Convertir el usuario actualizado a UserProfileDTO para la respuesta
-        return userMapper.toUserProfileDTO(updatedUser);
+        return userMapper.toUserProfileDTO(updatedRepresentante);
     }
 
-
-
     @Transactional
-    @Override
-    public UserProfileDTO getUserProfileById(Integer id) {
+    public UserProfileDTO getUserProfileByDni(String dni) {
+        Representante representante = representanteRepository.findByDni(dni)
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND_ERROR));
 
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
-
-        // Convertir a UserProfileDTO para la respuesta
-        return userMapper.toUserProfileDTO(user);
+        return userMapper.toUserProfileDTO(representante);
     }
 }

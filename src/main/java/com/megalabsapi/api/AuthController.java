@@ -1,12 +1,11 @@
 package com.megalabsapi.api;
 
-
 import com.megalabsapi.dto.*;
 import com.megalabsapi.entity.LoginAttempt;
 import com.megalabsapi.entity.VerificationCode;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.repository.VerificationCodeRepository;
-import com.megalabsapi.service.JwtService;
+import com.megalabsapi.security.TokenProvider;
 import com.megalabsapi.service.LoginAttemptService;
 import com.megalabsapi.service.NotificationService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,13 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import com.megalabsapi.entity.Representante;
 import com.megalabsapi.service.RepresentanteService;
-import org.springframework.web.bind.annotation.*;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -34,86 +29,68 @@ import java.util.UUID;
 @RequestMapping("/auth")
 public class AuthController {
 
-
     @Autowired
     private RepresentanteService representanteService;
-
     @Autowired
     private RepresentanteRepository representanteRepository;
-
     @Autowired
     private NotificationService notificationService;
-
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
-
     @Autowired
     private LoginAttemptService loginAttemptService;
-
     @Autowired
-    private JwtService jwtService;
-
+    private TokenProvider tokenProvider; // Reemplazamos JwtService con TokenProvider
 
     // Endpoint para iniciar sesión
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
             Representante representante = representanteService.autenticarUsuario(loginRequestDTO);
-            String token = jwtService.generateToken(representante.getEmail());
+            String token = tokenProvider.createAccessToken(representante.getDni()); // Generamos el token con TokenProvider
             LoginResponseDTO responseDTO = new LoginResponseDTO("Inicio de sesión exitoso", representante.getNombre(), token);
             return ResponseEntity.ok(responseDTO);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(new LoginResponseDTO("Error: Datos inválidos", null, null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponseDTO("Error: Datos inválidos", null, null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new LoginResponseDTO("Error inesperado: " + e.getMessage(), null, null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new LoginResponseDTO("Error inesperado: " + e.getMessage(), null, null));
         }
     }
 
-
-
     // Endpoint para registrar un nuevo representante
     @PostMapping("/register")
-    public ResponseEntity<Representante> register(@RequestBody Representante representante) {
+    public ResponseEntity<UserProfileDTO> register(@RequestBody UserRegistrationDTO registrationDTO) {
         try {
-            // Registramos el representante cifrando su contraseña
-            Representante nuevoRepresentante = representanteService.registrarRepresentante(representante);
-            return ResponseEntity.ok(nuevoRepresentante);  // Enviamos respuesta con el representante creado
+            Representante nuevoRepresentante = representanteService.registrarRepresentante(registrationDTO);
+            UserProfileDTO profileDTO = new UserProfileDTO(nuevoRepresentante.getDni(), nuevoRepresentante.getEmail(), nuevoRepresentante.getNombre(), nuevoRepresentante.getSedeAsignada(), nuevoRepresentante.getRole().getName());
+            return ResponseEntity.status(HttpStatus.CREATED).body(profileDTO);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);  // En caso de error, enviamos una respuesta vacía
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
 
     @PostMapping("/recover-password")
     public ResponseEntity<String> recoverPassword(@RequestBody RecoverPasswordRequestDTO recoverPasswordRequest) {
-        Representante representante = representanteRepository.findByEmail(recoverPasswordRequest.getEmail());
+        Representante representante = representanteRepository.findByEmail(recoverPasswordRequest.getEmail()).orElse(null);
 
         if (representante == null) {
-            return ResponseEntity.badRequest().body("Correo electrónico no encontrado");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Correo electrónico no encontrado");
         }
 
-        // Generar token de recuperación
         String recoveryToken = UUID.randomUUID().toString();
-
-        // Crear la URL de recuperación
         String encodedToken = URLEncoder.encode(recoveryToken, StandardCharsets.UTF_8);
-        String recoveryUrl = "http://localhost:8080/recover-password?token=" + encodedToken;  // Cambia la URL base según corresponda.
+        String recoveryUrl = "http://localhost:8080/recover-password?token=" + encodedToken;
 
-        // Crear el mensaje de recuperación de contraseña con el nombre del representante y el enlace
-        String message = String.format("Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s",
-                representante.getNombre(), recoveryUrl);
+        String message = String.format("Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s", representante.getNombre(), recoveryUrl);
 
-        // Enviar correo de recuperación usando el email almacenado
         notificationService.sendRecoveryEmail(representante.getEmail(), message);
 
         return ResponseEntity.ok("Se ha enviado un enlace de recuperación a su correo electrónico");
     }
 
-
     @PostMapping("/verify-code")
     public ResponseEntity<String> verifyCode(@RequestBody VerifyCodeRequestDTO verifyCodeRequest) {
-        VerificationCode verificationCode = verificationCodeRepository.findByCodeAndRepresentanteDni(
-                verifyCodeRequest.getCode(), verifyCodeRequest.getRepresentanteDni());
+        VerificationCode verificationCode = verificationCodeRepository.findByCodeAndRepresentanteDni(verifyCodeRequest.getCode(), verifyCodeRequest.getRepresentanteDni());
 
         if (verificationCode == null || verificationCode.isUsed()) {
             return ResponseEntity.badRequest().body("Código inválido o ya utilizado");
@@ -131,16 +108,14 @@ public class AuthController {
 
     @GetMapping("/suspicious-activities")
     public ResponseEntity<List<LoginAttempt>> getSuspiciousActivities(@RequestParam String representanteDni) {
-        // Llamamos al servicio usando el DNI del representante en lugar del ID
         List<LoginAttempt> suspiciousAttempts = loginAttemptService.getSuspiciousAttemptsByRepresentanteDni(representanteDni);
 
         if (suspiciousAttempts.isEmpty()) {
-            return ResponseEntity.notFound().build();  // Devolvemos un 404 si no hay actividades sospechosas
+            return ResponseEntity.notFound().build();
         }
 
         return ResponseEntity.ok(suspiciousAttempts);
     }
-
 
     @GetMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
@@ -154,7 +129,7 @@ public class AuthController {
             @RequestHeader("Authorization") String token,
             @RequestBody ActualizarCredencialesRequestDTO request) {
 
-        if (!jwtService.isTokenValid(token)) {  // isTokenValid mejor que validateToken
+        if (!tokenProvider.validateToken(token)) {  // Usamos TokenProvider para validar el token
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido o expirado");
         }
 
@@ -167,6 +142,4 @@ public class AuthController {
 
         return ResponseEntity.ok("Credenciales actualizadas exitosamente");
     }
-
 }
-

@@ -1,5 +1,6 @@
 package com.megalabsapi.enums;
 
-public enum Rol {
+public enum ERole {
     REPRESENTANTE
 }
+

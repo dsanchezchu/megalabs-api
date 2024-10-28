@@ -6,69 +6,69 @@ import com.megalabsapi.mapper.LoginMapper;
 import com.megalabsapi.mapper.RepresentanteMapper;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.service.RepresentanteService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RepresentanteServiceImpl implements RepresentanteService {
 
-    @Autowired
-    private RepresentanteRepository representanteRepository;
+    private final RepresentanteRepository representanteRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RepresentanteMapper representanteMapper;
+    private final LoginMapper loginMapper;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private static final String DNI_ERROR = "DNI incorrecto";
+    private static final String PASSWORD_ERROR = "Contraseña incorrecta";
+    private static final String EMAIL_DUPLICATE_ERROR = "El email ya está en uso";
 
-    @Autowired
-    private RepresentanteMapper representanteMapper;
-
-    @Autowired
-    private LoginMapper loginMapper;
+    public RepresentanteServiceImpl(RepresentanteRepository representanteRepository,
+                                    PasswordEncoder passwordEncoder,
+                                    RepresentanteMapper representanteMapper,
+                                    LoginMapper loginMapper) {
+        this.representanteRepository = representanteRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.representanteMapper = representanteMapper;
+        this.loginMapper = loginMapper;
+    }
 
     @Override
     public Representante registrarRepresentante(Representante representante) {
-        // Cifrar la contraseña antes de guardarla
         representante.setContraseña(passwordEncoder.encode(representante.getContraseña()));
         return representanteRepository.save(representante);
     }
 
     @Override
     public Representante autenticarUsuario(LoginRequestDTO loginRequestDTO) {
-        Representante representante = representanteRepository.findByDni(loginRequestDTO.getDni());
+        Representante representante = representanteRepository.findByDni(loginRequestDTO.getDni())
+                .orElseThrow(() -> new IllegalArgumentException(DNI_ERROR));
 
-        if (representante == null) {
-            throw new IllegalArgumentException("DNI incorrecto");
-        }
-
-        // Verificación de contraseña
         if (!passwordEncoder.matches(loginRequestDTO.getPassword(), representante.getContraseña())) {
             representante.setIntentosFallidos(representante.getIntentosFallidos() + 1);
             representanteRepository.save(representante);
-            throw new IllegalArgumentException("Contraseña incorrecta");
+            throw new IllegalArgumentException(PASSWORD_ERROR);
         }
 
-        // Reiniciar intentos fallidos en caso de autenticación exitosa
         representante.setIntentosFallidos(0);
         representanteRepository.save(representante);
 
-        // Retorna el representante autenticado
         return representante;
     }
 
     public void actualizarCredenciales(Representante representante, String nuevaContraseña, String nuevoEmail) {
-        // Actualizar la contraseña, cifrando la nueva contraseña
+        if (representanteRepository.findByEmail(nuevoEmail).isPresent()) {
+            throw new IllegalArgumentException(EMAIL_DUPLICATE_ERROR);
+        }
+
         representante.setContraseña(passwordEncoder.encode(nuevaContraseña));
-
-        // Actualizar el correo electrónico
         representante.setEmail(nuevoEmail);
-
-        // Guardar los cambios
         representanteRepository.save(representante);
     }
 
     @Override
     public Representante findByDni(String dni) {
-        return representanteRepository.findByDni(dni);  // Buscar representante por su dni en el repositorio
+        return representanteRepository.findByDni(dni)
+                .orElseThrow(() -> new IllegalArgumentException(DNI_ERROR));
     }
-
 }

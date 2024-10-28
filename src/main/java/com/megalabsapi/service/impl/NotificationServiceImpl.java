@@ -9,17 +9,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
+    private final JavaMailSender mailSender;
+
     @Autowired
-    private JavaMailSender mailSender;
+    public NotificationServiceImpl(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
+    }
+
+    @Override
+    public void sendEmail(String email, String subject, String message) {
+        try {
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(email);
+            mailMessage.setSubject(subject);
+            mailMessage.setText(message);
+            mailSender.send(mailMessage);
+        } catch (Exception e) {
+            System.err.println("Error enviando correo: " + e.getMessage());
+        }
+    }
 
     @Override
     public void sendRecoveryEmail(String email, String recoveryUrl) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Recuperación de contraseña");
-        message.setText("Haga clic en el siguiente enlace para recuperar su contraseña: " + recoveryUrl);
-        mailSender.send(message);
+        String message = "Haga clic en el siguiente enlace para recuperar su contraseña: " + recoveryUrl;
+        sendEmail(email, "Recuperación de contraseña", message);
     }
-
-
 }
+
+

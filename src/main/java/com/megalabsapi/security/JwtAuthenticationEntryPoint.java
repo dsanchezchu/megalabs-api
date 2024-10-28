@@ -2,7 +2,7 @@ package com.megalabsapi.security;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hampcode.exception.CustomErrorResponse;
+import com.megalabsapi.exception.CustomErrorResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,19 +22,19 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         String exceptionMsg = (String) request.getAttribute("exception");
 
-        if(exceptionMsg == null){
-            exceptionMsg = "Token not found or invalid";
+        if (exceptionMsg == null) {
+            exceptionMsg = "El token es inexistente o inválido";
         }
 
         CustomErrorResponse errorResponse = new CustomErrorResponse(LocalDateTime.now(), exceptionMsg, request.getRequestURI());
 
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.getWriter().write(convertObjectToJson(errorResponse));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write(convertObjectToJson(errorResponse));
     }
 
     private String convertObjectToJson(Object object) throws JsonProcessingException {
-        if(object == null){
+        if (object == null) {
             return null;
         }
         ObjectMapper mapper = new ObjectMapper();

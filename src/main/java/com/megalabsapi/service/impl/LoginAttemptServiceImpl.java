@@ -34,7 +34,7 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
         loginAttempt.setAttemptTime(Timestamp.from(Instant.now()));
         loginAttempt.setRepresentante(representante);
 
-        // Verifica si la actividad es sospechosa
+        // Verificar si la actividad es sospechosa
         boolean isSuspicious = isSuspiciousAttempt(ipAddress, device, representante);
         loginAttempt.setIsSuspicious(isSuspicious);
 
@@ -46,33 +46,24 @@ public class LoginAttemptServiceImpl implements LoginAttemptService {
                     "Dispositivo: %s\n" +
                     "IP: %s\n" +
                     "Ubicación: %s\n" +
-                    "Fecha/Hora: %s", device, ipAddress, location, loginAttempt.getAttemptTime().toString());
-
+                    "Fecha/Hora: %s", device, ipAddress, location, loginAttempt.getAttemptTime());
             notificationService.sendRecoveryEmail(representante.getEmail(), message);
         }
     }
 
     @Override
     public List<LoginAttempt> getSuspiciousAttemptsByRepresentanteDni(String dni) {
-        // Buscar el representante por DNI
-        Representante representante = representanteRepository.findByDni(dni);
-
-        if (representante == null) {
-            throw new IllegalArgumentException("Representante no encontrado con DNI: " + dni);
-        }
+        // Buscar el representante por DNI usando Optional para evitar NullPointerException
+        Representante representante = representanteRepository.findByDni(dni)
+                .orElseThrow(() -> new IllegalArgumentException("Representante no encontrado con DNI: " + dni));
 
         // Buscar y devolver los intentos sospechosos asociados al representante
         return loginAttemptRepository.findByRepresentanteAndIsSuspiciousTrue(representante);
     }
 
     private boolean isSuspiciousAttempt(String ipAddress, String device, Representante representante) {
-        LoginAttempt lastAttempt = loginAttemptRepository.findTopByRepresentanteOrderByAttemptTimeDesc(representante);
-
-        if (lastAttempt != null) {
-            return !lastAttempt.getIpAddress().equals(ipAddress) || !lastAttempt.getDevice().equals(device);
-        }
-
-        // Si no hay intentos anteriores, no se considera sospechoso
-        return false;
+        return loginAttemptRepository.findTopByRepresentanteOrderByAttemptTimeDesc(representante)
+                .map(lastAttempt -> !lastAttempt.getIpAddress().equals(ipAddress) || !lastAttempt.getDevice().equals(device))
+                .orElse(false);
     }
 }

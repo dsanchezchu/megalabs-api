@@ -1,33 +1,27 @@
 package com.megalabsapi.security;
 
-import com.hampcode.model.entity.User;
-import com.hampcode.repository.UserRepository;
-import org.springframework.security.core.GrantedAuthority;
+import com.megalabsapi.entity.Representante;
+import com.megalabsapi.repository.RepresentanteRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final RepresentanteRepository representanteRepository;
 
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public CustomUserDetailsService(RepresentanteRepository representanteRepository) {
+        this.representanteRepository = representanteRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el email: " + email));
+    public UserDetails loadUserByUsername(String dni) throws UsernameNotFoundException {
+        Representante representante = representanteRepository.findByDni(dni)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el DNI: " + dni));
 
-
-
-        // Convertir el objeto User a UserDetails
-        return UserPrincipal.create(user);
+        // Convertir el objeto Representante a UserDetails
+        return UserPrincipal.create(representante);
     }
 }

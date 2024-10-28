@@ -34,6 +34,7 @@ public class LoginAttempt {
     private boolean isSuspicious;
 
     public void setIsSuspicious(boolean isSuspicious) {
+        this.isSuspicious = isSuspicious;
     }
 }
 

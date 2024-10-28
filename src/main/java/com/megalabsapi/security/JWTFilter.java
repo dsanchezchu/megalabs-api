@@ -31,6 +31,7 @@ public class JWTFilter extends GenericFilterBean {
 
         // Verificar que el token no esté vacío y comience con "Bearer "
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            // Delegar la extracción del token en el TokenProvider
             String token = bearerToken.substring(7);
 
             // Obtener la autenticación a partir del token

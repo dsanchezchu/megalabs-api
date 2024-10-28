@@ -1,10 +1,15 @@
 package com.megalabsapi.repository;
 
 import com.megalabsapi.entity.VerificationCode;
-import jakarta.validation.constraints.NotEmpty;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface VerificationCodeRepository extends JpaRepository<VerificationCode, String> {
+import java.util.Optional;
 
-    VerificationCode findByCodeAndRepresentanteDni(@NotEmpty(message = "El código de verificación es obligatorio") String code, @NotEmpty(message = "El DNI del representante es obligatorio") String representanteDni);
+@Repository
+public interface VerificationCodeRepository extends JpaRepository<VerificationCode, Long> {
+
+    Optional<VerificationCode> findByRepresentanteEmailAndIsUsedFalse(String email);
+
+    Optional<VerificationCode> findByCodeAndRepresentanteDni(String code, String representanteDni);
 }

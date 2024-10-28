@@ -1,7 +1,7 @@
 package com.megalabsapi.security;
 
 import com.megalabsapi.exception.RoleNotFoundException;
-import com.megalabsapi.repository.UserRepository;
+import com.megalabsapi.repository.RepresentanteRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,7 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Component
 public class TokenProvider {
-    private final UserRepository userRepository;
+    private final RepresentanteRepository representanteRepository;
 
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -46,13 +46,13 @@ public class TokenProvider {
 
     // Generar tokens JWT
     public String createAccessToken(Authentication authentication) {
-        // Obtener el email del usuario autenticado desde el principal
-        String email = authentication.getName();
+        // Obtener el DNI del representante autenticado desde el principal
+        String dni = authentication.getName();
 
-        // Buscar el usuario en la base de datos usando el email
-        com.hampcode.model.entity.User user = userRepository
-                .findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el email: " + email));
+        // Buscar el representante en la base de datos usando el DNI
+        com.megalabsapi.entity.Representante representante = representanteRepository
+                .findByDni(dni)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el DNI: " + dni));
 
         // Obtener el rol del usuario
         String role = authentication
@@ -65,7 +65,7 @@ public class TokenProvider {
         // Crear el token JWT con solo el rol y el sujeto
         return Jwts
                 .builder()
-                .setSubject(authentication.getName())  // El sujeto será el email o el nombre de usuario
+                .setSubject(dni)  // El sujeto ahora es el DNI del representante
                 .claim("role", role)  // Solo se incluye el rol como claim
                 .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(new Date(System.currentTimeMillis() + jwtValidityInSeconds * 1000))
@@ -80,7 +80,7 @@ public class TokenProvider {
 
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(role));
 
-        // El principal será el email del usuario que viene en el subject del JWT
+        // El principal ahora es el DNI del representante, extraído del sujeto del JWT
         User principal = new User(claims.getSubject(), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

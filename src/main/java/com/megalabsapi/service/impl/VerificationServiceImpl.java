@@ -3,15 +3,18 @@ package com.megalabsapi.service.impl;
 import com.megalabsapi.entity.Representante;
 import com.megalabsapi.entity.VerificationCode;
 import com.megalabsapi.mapper.VerificationCodeMapper;
+import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.repository.VerificationCodeRepository;
 import com.megalabsapi.service.NotificationService;
 import com.megalabsapi.service.VerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Optional;
 
 @Service
 public class VerificationServiceImpl implements VerificationService {
@@ -20,10 +23,16 @@ public class VerificationServiceImpl implements VerificationService {
     private NotificationService notificationService;
 
     @Autowired
+    private RepresentanteRepository representanteRepository;
+
+    @Autowired
     private VerificationCodeRepository verificationCodeRepository;
 
     @Autowired
-    private VerificationCodeMapper verificationCodeMapper;  // Inyectamos el mapper
+    private VerificationCodeMapper verificationCodeMapper;
+
+    @Value("${verification.code.expiration-time:300}")
+    private long codeExpirationTime; // Expiración en segundos, configurable
 
     @Override
     public String generateVerificationCode() {
@@ -34,23 +43,27 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public VerificationCode createVerificationCode(Representante representante) {
-        String code = generateVerificationCode();  // Genera un nuevo código de verificación
-        Timestamp expiryDate = Timestamp.from(Instant.now().plusSeconds(300)); // Establecer la expiración a 5 minutos
+        String code = generateVerificationCode();
+        Timestamp expiryDate = Timestamp.from(Instant.now().plusSeconds(codeExpirationTime));
 
-        // Crear una nueva instancia de VerificationCode
-        VerificationCode verificationCode = new VerificationCode();
-        verificationCode.setCode(code);
-        verificationCode.setExpiryDate(expiryDate);
-        verificationCode.setRepresentante(representante);
-        verificationCode.setIsUsed(false);
+        VerificationCode verificationCode = verificationCodeMapper.toVerificationCode(code, expiryDate, representante);
 
-        // Guardar y retornar el código generado
         return verificationCodeRepository.save(verificationCode);
     }
 
     @Override
     public void sendVerificationCode(String email) {
-        String verificationCode = generateVerificationCode();
+        Optional<VerificationCode> existingCode = verificationCodeRepository.findByRepresentanteEmailAndIsUsedFalse(email);
+
+        String verificationCode;
+        if (existingCode.isPresent() && existingCode.get().getExpiryDate().after(Timestamp.from(Instant.now()))) {
+            verificationCode = existingCode.get().getCode();
+        } else {
+            Representante representante = representanteRepository.findByEmail(email)
+                    .orElseThrow(() -> new IllegalArgumentException("Representante no encontrado con el email: " + email));
+            verificationCode = createVerificationCode(representante).getCode();
+        }
+
         String message = "Su código de verificación es: " + verificationCode;
         notificationService.sendRecoveryEmail(email, message);
     }
