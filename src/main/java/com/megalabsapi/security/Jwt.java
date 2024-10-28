@@ -1,4 +1,4 @@
-package com.megalabsapi.service.impl;
+package com.megalabsapi.security;
 
 import com.megalabsapi.service.JwtService;
 import io.jsonwebtoken.Claims;
@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
-public class JwtServiceImpl implements JwtService {
+public class Jwt implements JwtService {
 
     // Generar el token JWT
     // Usa una clave segura de al menos 256 bits
