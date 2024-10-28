@@ -71,4 +71,9 @@ public class RepresentanteServiceImpl implements RepresentanteService {
         return representanteRepository.findByDni(dni)
                 .orElseThrow(() -> new IllegalArgumentException(DNI_ERROR));
     }
+
+    @Override
+    public Representante save(Representante representante) {
+        return representanteRepository.save(representante);
+    }
 }

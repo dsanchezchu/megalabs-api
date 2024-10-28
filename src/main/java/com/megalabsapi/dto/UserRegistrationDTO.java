@@ -4,8 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 public class UserRegistrationDTO {
 
@@ -26,5 +28,8 @@ public class UserRegistrationDTO {
 
     @NotBlank(message = "La sede asignada es obligatoria")
     private String sedeAsignada;
+
+    @NotBlank(message = "El rol es obligatorio")  // Agrega validación si es necesario
+    private String roleName;  // Agrega este campo
 }
 

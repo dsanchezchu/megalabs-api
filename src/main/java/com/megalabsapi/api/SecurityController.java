@@ -20,8 +20,15 @@ public class SecurityController {
 
     @GetMapping("/suspicious-activities")
     public ResponseEntity<List<LoginAttempt>> getSuspiciousActivities(@RequestParam String representanteDni) {
+
         List<LoginAttempt> suspiciousAttempts = loginAttemptService.getSuspiciousAttemptsByRepresentanteDni(representanteDni);
+
+        if (suspiciousAttempts.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Retorna 204 No Content si no hay intentos sospechosos
+        }
+
         return ResponseEntity.ok(suspiciousAttempts);
     }
+
 }
 

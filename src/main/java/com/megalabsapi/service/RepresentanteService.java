@@ -46,4 +46,6 @@ public interface RepresentanteService {
      * @throws IllegalArgumentException si el representante no se encuentra.
      */
     Representante findByDni(String dni);
+
+    Representante save(Representante representante);
 }

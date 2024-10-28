@@ -1,8 +1,10 @@
 package com.megalabsapi.dto;
 
 import com.megalabsapi.enums.ERole;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 public class UserProfileDTO {
 

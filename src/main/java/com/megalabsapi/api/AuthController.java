@@ -2,8 +2,12 @@ package com.megalabsapi.api;
 
 import com.megalabsapi.dto.*;
 import com.megalabsapi.entity.LoginAttempt;
+import com.megalabsapi.entity.Role;
 import com.megalabsapi.entity.VerificationCode;
+import com.megalabsapi.enums.ERole;
+import com.megalabsapi.exception.RoleNotFoundException;
 import com.megalabsapi.repository.RepresentanteRepository;
+import com.megalabsapi.repository.RoleRepository;
 import com.megalabsapi.repository.VerificationCodeRepository;
 import com.megalabsapi.security.TokenProvider;
 import com.megalabsapi.service.LoginAttemptService;
@@ -13,16 +17,20 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import com.megalabsapi.entity.Representante;
 import com.megalabsapi.service.RepresentanteService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -35,6 +43,10 @@ public class AuthController {
     private RepresentanteRepository representanteRepository;
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
     @Autowired
     private VerificationCodeRepository verificationCodeRepository;
     @Autowired
@@ -43,11 +55,19 @@ public class AuthController {
     private TokenProvider tokenProvider; // Reemplazamos JwtService con TokenProvider
 
     // Endpoint para iniciar sesión
+
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDTO) {
         try {
             Representante representante = representanteService.autenticarUsuario(loginRequestDTO);
-            String token = tokenProvider.createAccessToken(representante.getDni()); // Generamos el token con TokenProvider
+
+            // Crear un objeto Authentication
+            Authentication authentication = new UsernamePasswordAuthenticationToken(
+                    representante.getDni(), null, representante.getRole().getAuthorities());
+
+            // Generar el token usando Authentication
+            String token = tokenProvider.createAccessToken(authentication);
+
             LoginResponseDTO responseDTO = new LoginResponseDTO("Inicio de sesión exitoso", representante.getNombre(), token);
             return ResponseEntity.ok(responseDTO);
         } catch (IllegalArgumentException e) {
@@ -57,17 +77,45 @@ public class AuthController {
         }
     }
 
+
     // Endpoint para registrar un nuevo representante
     @PostMapping("/register")
     public ResponseEntity<UserProfileDTO> register(@RequestBody UserRegistrationDTO registrationDTO) {
         try {
-            Representante nuevoRepresentante = representanteService.registrarRepresentante(registrationDTO);
-            UserProfileDTO profileDTO = new UserProfileDTO(nuevoRepresentante.getDni(), nuevoRepresentante.getEmail(), nuevoRepresentante.getNombre(), nuevoRepresentante.getSedeAsignada(), nuevoRepresentante.getRole().getName());
+            Representante nuevoRepresentante = new Representante();
+            nuevoRepresentante.setDni(registrationDTO.getDni());
+            nuevoRepresentante.setEmail(registrationDTO.getEmail());
+            nuevoRepresentante.setNombre(registrationDTO.getNombre());
+            nuevoRepresentante.setSedeAsignada(registrationDTO.getSedeAsignada());
+
+            // Convertir el roleName (String) a ERole y asignarlo al Representante
+            ERole roleEnum = ERole.valueOf(registrationDTO.getRoleName());
+
+            // Obtener el objeto Role desde la base de datos
+            Role role = roleRepository.findByName(roleEnum)
+                    .orElseThrow(() -> new RoleNotFoundException("Role not found"));
+
+            nuevoRepresentante.setRole(role);
+
+            representanteRepository.save(nuevoRepresentante);
+
+            UserProfileDTO profileDTO = new UserProfileDTO(
+                    nuevoRepresentante.getDni(),
+                    nuevoRepresentante.getEmail(),
+                    nuevoRepresentante.getNombre(),
+                    nuevoRepresentante.getSedeAsignada(),
+                    nuevoRepresentante.getRole().getName()
+            );
+
             return ResponseEntity.status(HttpStatus.CREATED).body(profileDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null); // Error por rol inválido
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
     }
+
+
 
     @PostMapping("/recover-password")
     public ResponseEntity<String> recoverPassword(@RequestBody RecoverPasswordRequestDTO recoverPasswordRequest) {
@@ -90,12 +138,17 @@ public class AuthController {
 
     @PostMapping("/verify-code")
     public ResponseEntity<String> verifyCode(@RequestBody VerifyCodeRequestDTO verifyCodeRequest) {
-        VerificationCode verificationCode = verificationCodeRepository.findByCodeAndRepresentanteDni(verifyCodeRequest.getCode(), verifyCodeRequest.getRepresentanteDni());
+        Optional<VerificationCode> optionalVerificationCode =
+                verificationCodeRepository.findByCodeAndRepresentanteDni(
+                        verifyCodeRequest.getCode(),
+                        verifyCodeRequest.getRepresentanteDni()
+                );
 
-        if (verificationCode == null || verificationCode.isUsed()) {
+        if (optionalVerificationCode.isEmpty() || optionalVerificationCode.get().isUsed()) {
             return ResponseEntity.badRequest().body("Código inválido o ya utilizado");
         }
 
+        VerificationCode verificationCode = optionalVerificationCode.get();
         if (verificationCode.getExpiryDate().before(new Timestamp(System.currentTimeMillis()))) {
             return ResponseEntity.badRequest().body("El código ha expirado");
         }
@@ -105,6 +158,7 @@ public class AuthController {
 
         return ResponseEntity.ok("Verificación exitosa. Bienvenido al sistema");
     }
+
 
     @GetMapping("/suspicious-activities")
     public ResponseEntity<List<LoginAttempt>> getSuspiciousActivities(@RequestParam String representanteDni) {
