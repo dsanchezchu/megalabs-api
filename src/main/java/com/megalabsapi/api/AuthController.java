@@ -95,7 +95,9 @@ public class AuthController {
         String encodedToken = URLEncoder.encode(recoveryToken, StandardCharsets.UTF_8);
         String recoveryUrl = "http://localhost:8080/recover-password?token=" + encodedToken;
 
-        String message = String.format("Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s", representante.getNombre(), recoveryUrl);
+        String message = String.format("Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s",
+                representante.getNombre(),
+                recoveryUrl);
 
         notificationService.sendRecoveryEmail(representante.getEmail(), message);
 
@@ -138,12 +140,14 @@ public class AuthController {
     }
 
     @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
-    @GetMapping("/logout")
-    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         if (authentication != null) {
             new SecurityContextLogoutHandler().logout(request, response, authentication);
         }
+        return ResponseEntity.ok("Sesión cerrada exitosamente");
     }
+
 
     @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PostMapping("/actualizar-credenciales")

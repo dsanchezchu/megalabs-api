@@ -55,10 +55,12 @@ public class UserServiceImpl implements UserService {
 
         registrationDTO.setPassword(passwordEncoder.encode(registrationDTO.getPassword()));
         Representante representante = userMapper.toRepresentanteEntity(registrationDTO);
+        representante.setContraseña(registrationDTO.getPassword());
         representante.setRole(role);
 
         log.info("Guardando nuevo representante con DNI: {}", registrationDTO.getDni());
         Representante savedRepresentante = representanteRepository.save(representante);
+        log.info("Guardado nuevo representante con DNI: {}", registrationDTO.getDni());
 
         return userMapper.toUserProfileDTO(savedRepresentante);
     }
@@ -93,7 +95,7 @@ public class UserServiceImpl implements UserService {
 
         representante.setNombre(userProfileDTO.getNombre());
         representante.setEmail(userProfileDTO.getEmail());
-        representante.setSedeAsignada(userProfileDTO.getSedeAsignada());
+        representante.setLaboratorio(userProfileDTO.getLaboratorio());
 
         Representante updatedRepresentante = representanteRepository.save(representante);
 

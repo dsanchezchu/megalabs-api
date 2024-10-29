@@ -24,7 +24,13 @@ public class UserMapper {
 
     // Convertir de Representante a UserProfileDTO para la respuesta
     public UserProfileDTO toUserProfileDTO(Representante representante) {
-        return modelMapper.map(representante, UserProfileDTO.class);
+        UserProfileDTO userProfileDTO = new UserProfileDTO();
+        userProfileDTO.setDni(representante.getDni());
+        userProfileDTO.setEmail(representante.getEmail());
+        userProfileDTO.setNombre(representante.getNombre());
+        userProfileDTO.setLaboratorio(representante.getLaboratorio()); // Adaptar según los campos de UserProfileDTO
+        userProfileDTO.setRole(representante.getRole().getName()); // Asumiendo que UserProfileDTO tiene un campo `role`
+        return userProfileDTO;
     }
 
     // Convertir de LoginDTO a Representante (para el proceso de login)

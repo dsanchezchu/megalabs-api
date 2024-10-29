@@ -1,5 +1,6 @@
 package com.megalabsapi.dto;
 
+import com.megalabsapi.entity.Laboratorio;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,8 +27,8 @@ public class UserRegistrationDTO {
     @Size(min = 4, message = "La contraseña debe tener al menos 4 caracteres")
     private String password;
 
-    @NotBlank(message = "La sede asignada es obligatoria")
-    private String sedeAsignada;
+    @NotBlank(message = "El RUC del laboratorio es obligatorio")
+    private Laboratorio laboratorio;
 
     @NotBlank(message = "El rol es obligatorio")  // Agrega validación si es necesario
     private String roleName;  // Agrega este campo
