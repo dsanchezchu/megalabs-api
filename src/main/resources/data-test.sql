@@ -20,6 +20,13 @@ VALUES
     (1, '2024-09-27', 'Producto A', 'EN_STOCK'),
     (2, '2024-09-27', 'Producto B', 'EN_STOCK');
 
+-- Insertar en la tabla formula_desarrollada relacionada con los productos existentes
+INSERT INTO formula_desarrollada (nombre, beneficios, ingredientes_clave, diferencias, fecha_desarrollo, producto_id)
+VALUES
+    ('Fórmula Mejorada A', 'Mejora la absorción y efectividad del Producto A', 'Ingrediente X, Ingrediente Y', 'Nueva presentación y mejor biodisponibilidad', '2024-09-25', 1),
+    ('Fórmula Mejorada B', 'Reduce los efectos secundarios del Producto B', 'Ingrediente A, Ingrediente B', 'Reducción de dosis sin perder efectividad', '2024-09-25', 2);
+
+
 -- Insertar en la tabla categoria_producto
 INSERT INTO categoria_producto (ID_Categoria, Nombre_Categoria, Producto_ID_Producto)
 VALUES
@@ -41,6 +48,12 @@ VALUES
 -- Insertar en la tabla entrega_muestra
 INSERT INTO entrega_Muestra (Fecha, Lugar, Estado, created_at,updated_at, Cliente_RUC, Producto_ID_Producto)
 VALUES ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '2024-09-25 14:32:00', '2024-09-27 09:00:00', '98354231024', 1);
+
+-- Insertar en la tabla no_conformidad asociada a una entrega de muestra
+INSERT INTO no_conformidad (descripcion_problema, fecha_deteccion, causa_raiz, acciones_correctivas, resultado_seguimiento, critico, entrega_muestra_id)
+VALUES
+    ('Producto dañado durante el transporte', '2024-09-28', 'Transporte inadecuado', 'Mejorar el embalaje', 'Se han implementado cambios en el embalaje', TRUE, 1),
+    ('Defecto en la formulación', '2024-09-29', 'Error en el proceso de producción', 'Ajustar los parámetros de producción', 'Se ajustaron los parámetros de producción y se evitó el defecto', FALSE, 2);
 
 -- Insertar en la tabla pago
 INSERT INTO pago (Monto_Total, Fecha_Pago, Metodo_Pago, Estado)

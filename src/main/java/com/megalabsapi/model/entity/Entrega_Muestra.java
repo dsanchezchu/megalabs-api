@@ -4,6 +4,7 @@ import com.megalabsapi.model.enums.EntregaStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -39,4 +40,5 @@ public class Entrega_Muestra {
     @ManyToOne
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
+
 }
