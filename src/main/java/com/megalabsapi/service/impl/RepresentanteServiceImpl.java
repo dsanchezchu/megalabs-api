@@ -1,15 +1,13 @@
 package com.megalabsapi.service.impl;
 
 import com.megalabsapi.dto.LoginRequestDTO;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.mapper.LoginMapper;
 import com.megalabsapi.mapper.RepresentanteMapper;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.service.RepresentanteService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class RepresentanteServiceImpl implements RepresentanteService {

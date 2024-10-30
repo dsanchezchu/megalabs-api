@@ -1,7 +1,7 @@
 package com.megalabsapi.mapper;
 
 import com.megalabsapi.dto.RecoverPasswordRequestDTO;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

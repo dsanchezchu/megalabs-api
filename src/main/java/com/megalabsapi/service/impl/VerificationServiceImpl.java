@@ -1,7 +1,7 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.entity.Representante;
-import com.megalabsapi.entity.VerificationCode;
+import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.model.entity.VerificationCode;
 import com.megalabsapi.mapper.VerificationCodeMapper;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.repository.VerificationCodeRepository;
