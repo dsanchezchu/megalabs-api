@@ -1,6 +1,6 @@
-package com.megalabsapi.entity;
+package com.megalabsapi.model.entity;
 
-import com.megalabsapi.enums.AuditoriaStatus;
+import com.megalabsapi.model.enums.AuditoriaStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;

@@ -1,6 +1,6 @@
 package com.megalabsapi.security;
 
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

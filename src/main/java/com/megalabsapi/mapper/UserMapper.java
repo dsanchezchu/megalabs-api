@@ -4,7 +4,7 @@ import com.megalabsapi.dto.AuthResponseDTO;
 import com.megalabsapi.dto.LoginDTO;
 import com.megalabsapi.dto.UserProfileDTO;
 import com.megalabsapi.dto.UserRegistrationDTO;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

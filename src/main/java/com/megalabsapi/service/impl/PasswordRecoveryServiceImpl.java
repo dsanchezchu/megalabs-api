@@ -1,7 +1,7 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.entity.PasswordRecoveryToken;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.PasswordRecoveryToken;
+import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.mapper.RecoverPasswordMapper;
 import com.megalabsapi.repository.PasswordRecoveryTokenRepository;
 import com.megalabsapi.repository.RepresentanteRepository;

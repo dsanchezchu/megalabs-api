@@ -1,6 +1,7 @@
 package com.megalabsapi.security;
 
 import com.megalabsapi.exception.RoleNotFoundException;
+import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.repository.RepresentanteRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -50,7 +51,7 @@ public class TokenProvider {
         String dni = authentication.getName();
 
         // Buscar el representante en la base de datos usando el DNI
-        com.megalabsapi.entity.Representante representante = representanteRepository
+        Representante representante = representanteRepository
                 .findByDni(dni)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con el DNI: " + dni));
 

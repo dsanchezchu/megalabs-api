@@ -1,8 +1,8 @@
 package com.megalabsapi.mapper;
 
 import com.megalabsapi.dto.VerifyCodeRequestDTO;
-import com.megalabsapi.entity.Representante;
-import com.megalabsapi.entity.VerificationCode;
+import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.model.entity.VerificationCode;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,6 @@
 package com.megalabsapi.dto;
 
-import com.megalabsapi.entity.Laboratorio;
+import com.megalabsapi.model.entity.Laboratorio;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -1,6 +1,6 @@
 package com.megalabsapi.security;
 
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.repository.RepresentanteRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

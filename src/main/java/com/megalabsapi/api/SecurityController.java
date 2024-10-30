@@ -1,6 +1,6 @@
 package com.megalabsapi.api;
 
-import com.megalabsapi.entity.LoginAttempt;
+import com.megalabsapi.model.entity.LoginAttempt;
 import com.megalabsapi.service.LoginAttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

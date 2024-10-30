@@ -1,4 +1,4 @@
-package com.megalabsapi.enums;
+package com.megalabsapi.model.enums;
 
 public enum EntregaStatus{
     PENDIENTE,

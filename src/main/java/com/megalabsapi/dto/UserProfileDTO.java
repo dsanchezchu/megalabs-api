@@ -1,7 +1,7 @@
 package com.megalabsapi.dto;
 
-import com.megalabsapi.entity.Laboratorio;
-import com.megalabsapi.enums.ERole;
+import com.megalabsapi.model.entity.Laboratorio;
+import com.megalabsapi.model.enums.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

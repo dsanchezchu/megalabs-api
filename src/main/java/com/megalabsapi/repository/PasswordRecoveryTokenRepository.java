@@ -1,6 +1,6 @@
 package com.megalabsapi.repository;
 
-import com.megalabsapi.entity.PasswordRecoveryToken;
+import com.megalabsapi.model.entity.PasswordRecoveryToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,7 +1,7 @@
 package com.megalabsapi.service;
 
-import com.megalabsapi.entity.Representante;
-import com.megalabsapi.entity.VerificationCode;
+import com.megalabsapi.model.entity.Representante;
+import com.megalabsapi.model.entity.VerificationCode;
 
 /**
  * Servicio para gestionar la generación y envío de códigos de verificación para representantes.

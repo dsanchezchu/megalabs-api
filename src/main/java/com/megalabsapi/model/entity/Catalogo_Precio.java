@@ -1,4 +1,4 @@
-package com.megalabsapi.entity;
+package com.megalabsapi.model.entity;
 
 import lombok.Data;
 import jakarta.persistence.*;

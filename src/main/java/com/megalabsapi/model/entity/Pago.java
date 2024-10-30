@@ -1,7 +1,7 @@
-package com.megalabsapi.entity;
+package com.megalabsapi.model.entity;
 
-import com.megalabsapi.enums.PagoStatus;
-import com.megalabsapi.enums.PaymentMethod;
+import com.megalabsapi.model.enums.PagoStatus;
+import com.megalabsapi.model.enums.PaymentMethod;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.sql.Date;

@@ -1,7 +1,7 @@
 package com.megalabsapi.repository;
 
-import com.megalabsapi.entity.LoginAttempt;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.LoginAttempt;
+import com.megalabsapi.model.entity.Representante;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

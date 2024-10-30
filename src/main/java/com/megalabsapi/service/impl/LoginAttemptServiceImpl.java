@@ -1,7 +1,7 @@
 package com.megalabsapi.service.impl;
 
-import com.megalabsapi.entity.LoginAttempt;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.LoginAttempt;
+import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.repository.LoginAttemptRepository;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.service.NotificationService;

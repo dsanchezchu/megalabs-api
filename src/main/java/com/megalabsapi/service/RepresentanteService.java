@@ -1,7 +1,7 @@
 package com.megalabsapi.service;
 
 import com.megalabsapi.dto.LoginRequestDTO;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 
 /**
  * Servicio para gestionar las operaciones relacionadas con los representantes,

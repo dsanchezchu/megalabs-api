@@ -1,6 +1,6 @@
-package com.megalabsapi.entity;
+package com.megalabsapi.model.entity;
 
-import com.megalabsapi.enums.ERole;
+import com.megalabsapi.model.enums.ERole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,7 +8,6 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 

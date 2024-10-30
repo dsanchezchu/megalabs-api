@@ -1,6 +1,6 @@
-package com.megalabsapi.entity;
+package com.megalabsapi.model.entity;
 
-import com.megalabsapi.enums.ControlCalidadStatus;
+import com.megalabsapi.model.enums.ControlCalidadStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;

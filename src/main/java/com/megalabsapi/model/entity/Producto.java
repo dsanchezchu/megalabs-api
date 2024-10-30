@@ -1,8 +1,8 @@
-package com.megalabsapi.entity;
+package com.megalabsapi.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import com.megalabsapi.enums.StockStatus;
+import com.megalabsapi.model.enums.StockStatus;
 
 @Data
 @Entity

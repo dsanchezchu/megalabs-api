@@ -1,11 +1,8 @@
 package com.megalabsapi.api;
 
 import com.megalabsapi.dto.*;
-import com.megalabsapi.entity.LoginAttempt;
-import com.megalabsapi.entity.Role;
-import com.megalabsapi.entity.VerificationCode;
-import com.megalabsapi.enums.ERole;
-import com.megalabsapi.exception.RoleNotFoundException;
+import com.megalabsapi.model.entity.LoginAttempt;
+import com.megalabsapi.model.entity.VerificationCode;
 import com.megalabsapi.repository.RepresentanteRepository;
 import com.megalabsapi.repository.RoleRepository;
 import com.megalabsapi.repository.VerificationCodeRepository;
@@ -19,11 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
-import com.megalabsapi.entity.Representante;
+import com.megalabsapi.model.entity.Representante;
 import com.megalabsapi.service.RepresentanteService;
 
 
