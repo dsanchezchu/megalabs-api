@@ -4,9 +4,9 @@ import com.megalabsapi.model.enums.EntregaStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Entity

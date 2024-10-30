@@ -4,7 +4,6 @@ import lombok.Data;
 import jakarta.persistence.*;
 import java.sql.Date;
 import java.sql.Time;
-import java.util.List;
 
 @Data
 @Entity

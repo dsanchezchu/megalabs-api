@@ -3,7 +3,6 @@ package com.megalabsapi.model.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import com.megalabsapi.model.enums.StockStatus;
-import java.util.List;
 
 @Data
 @Entity
