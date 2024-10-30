@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -38,4 +40,5 @@ public class Entrega_Muestra {
     @ManyToOne
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
+
 }
