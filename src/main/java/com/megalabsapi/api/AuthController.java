@@ -13,6 +13,7 @@ import com.megalabsapi.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -72,8 +73,9 @@ public class AuthController {
         try {
             UserProfileDTO profileDTO = userService.registerRepresentante(registrationDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(profileDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        } catch (DataIntegrityViolationException e) {
+            UserProfileDTO errorDTO = new UserProfileDTO();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDTO);
         }
     }
 
