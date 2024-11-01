@@ -1,4 +1,4 @@
-package com.megalabsapi.service.impl;
+package com.megalabsapi.service;
 
 import com.megalabsapi.repository.DetalleVentaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

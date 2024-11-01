@@ -1,4 +1,4 @@
-package com.megalabsapi.service.impl;
+package com.megalabsapi.service;
 
 import com.megalabsapi.model.entity.Medicamento;
 import com.megalabsapi.repository.MedicamentoRepository;

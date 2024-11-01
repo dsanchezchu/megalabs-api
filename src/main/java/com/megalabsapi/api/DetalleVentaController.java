@@ -1,6 +1,6 @@
 package com.megalabsapi.api;
 
-import com.megalabsapi.service.impl.DetalleVentaService;
+import com.megalabsapi.service.DetalleVentaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
