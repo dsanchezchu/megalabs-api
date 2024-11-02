@@ -4,7 +4,9 @@ import com.megalabsapi.model.enums.EntregaStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -13,7 +15,7 @@ public class Entrega_Muestra {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Entrega")
-    private Integer idEntrega;
+    private Integer id;
 
     @Column(name = "Fecha", nullable = false)
     private Date fecha;
@@ -24,6 +26,12 @@ public class Entrega_Muestra {
     @Column(name = "Estado", nullable = false)
     @Enumerated(EnumType.STRING)
     private EntregaStatus estado; // Usando el enum
+
+    @Column(name = "created_at",nullable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "Cliente_RUC", referencedColumnName = "RUC", nullable = false)
