@@ -32,7 +32,4 @@ public class Pago {
     @Enumerated(EnumType.STRING)
     private PagoStatus estado;
 
-    // Relación con Venta
-    @OneToMany(mappedBy = "pago", cascade = CascadeType.ALL)
-    private List<Venta> ventas;
 }
