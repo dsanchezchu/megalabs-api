@@ -25,7 +25,7 @@ import static org.springframework.security.web.util.matcher.AntPathRequestMatche
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-@EnableMethodSecurity // Importante para anotaciones @PreAuthorize
+@EnableMethodSecurity
 public class WebSecurityConfig{
 
     private final TokenProvider tokenProvider;

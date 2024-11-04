@@ -1,92 +1,154 @@
--- Insertar en la tabla laboratorio
-INSERT INTO laboratorio (RUC, NRM_Registro_Sanitario, Direccion, Telefono)
-VALUES ('12345678901', 'NRM-001', 'Av. Ejemplo 123', '987654321');
-
--- Insertar en la tabla cliente
-INSERT INTO cliente (RUC, Nombre, Licencia, Especializacion)
+-- Tabla cliente
+INSERT INTO cliente (ruc, email, especializacion, licencia, nombre)
 VALUES
-    ('98354231024', 'Juan Perez', 'LIC-001', 'Farmacia'),
-    ('98354231025', 'Ana Lopez', 'LIC-002', 'Clínica');
+    ('98354231024', 'cliente1@ejemplo.com', 'Farmacia', 'LIC-001', 'Juan Perez'),
+    ('98354231025', 'cliente2@ejemplo.com', 'Clínica', 'LIC-002', 'Ana Lopez');
 
--- Insertar en la tabla role
-INSERT INTO roles (name)
+-- Tabla encuesta_entrega
+INSERT INTO encuesta_entrega (id, comentarios, estado_producto, facilidad_contacto, fecha_encuesta, id_pedido, nombre_cliente, profesionalismo_personal, puntualidad_entrega)
 VALUES
-    ('REPRESENTANTE');
+    (1, 'Buena entrega', 5, 4, '2024-01-01 00:00:00', 'PED-001', 'Juan Perez', 5, 5),
+    (2, 'Entrega tardía', 3, 2, '2024-01-02 00:00:00', 'PED-002', 'Ana Lopez', 3, 2);
 
--- Insertar en la tabla representante
-INSERT INTO representante (DNI, Nombre, Sede_Asignada, Laboratorio_RUC, Contraseña, Intentos, Email, role_id)
+-- Tabla encuesta_recojo
+INSERT INTO encuesta_recojo (id, amabilidad_personal, claridad_instrucciones, comentarios, estado_producto, fecha_encuesta, id_pedido, nombre_cliente, puntualidad_recojo)
 VALUES
-    ('12345678', 'Maria Gomez', 'Sede Central', '12345678901', 'hashed_password_123', 0, 'maria.gomez@example.com', 1),
-    ('87654321', 'Carlos Ramirez', 'Sede Norte', '12345678901', 'hashed_password_123', 0, 'carlos.ramirez@example.com', 1);
+    (1, 5, 4, 'Proceso claro', 5, '2024-01-03 00:00:00', 'REC-001', 'Juan Perez', 5),
+    (2, 3, 3, 'Instrucciones confusas', 4, '2024-01-04 00:00:00', 'REC-002', 'Ana Lopez', 3);
 
--- Insertar en la tabla producto con enum de stock
-INSERT INTO producto (ID_Producto, Fecha_Venta, Nombre, Stock)
+-- Tabla laboratorio
+INSERT INTO laboratorio (ruc, direccion, nrm_registro_sanitario, telefono)
 VALUES
-    (1, '2024-09-27', 'Producto A', 'EN_STOCK'),
-    (2, '2024-09-27', 'Producto B', 'EN_STOCK');
+    ('12345678901', 'Av. Ejemplo 123', 'NRM-001', '987654321'),
+    ('12345678902', 'Calle Ejemplo 456', 'NRM-002', '123456789');
 
--- Insertar en la tabla formula_desarrollada relacionada con los productos existentes
-INSERT INTO formula_desarrollada (nombre, beneficios, ingredientes_clave, diferencias, fecha_desarrollo, producto_id)
+-- Tabla medicamento
+INSERT INTO medicamento (id, cantidad, laboratorio, nombre)
 VALUES
-    ('Fórmula Mejorada A', 'Mejora la absorción y efectividad del Producto A', 'Ingrediente X, Ingrediente Y', 'Nueva presentación y mejor biodisponibilidad', '2024-09-25', 1),
-    ('Fórmula Mejorada B', 'Reduce los efectos secundarios del Producto B', 'Ingrediente A, Ingrediente B', 'Reducción de dosis sin perder efectividad', '2024-09-25', 2);
+    (1, 100, 'Laboratorio A', 'Medicamento A'),
+    (2, 200, 'Laboratorio B', 'Medicamento B');
 
--- Insertar en la tabla categoria_producto
-INSERT INTO categoria_producto (ID_Categoria, Nombre_Categoria, Producto_ID_Producto)
+-- Tabla metodo_analitico
+INSERT INTO metodo_analitico (id_metodo, descripcion, documentacion_url, fecha_validacion, fiabilidad, nombre, precision)
+VALUES
+    (1, 'Método para análisis de pureza', 'http://example.com/doc1', '2024-01-01 00:00:00', 'Alta', 'Método A', 'Alta'),
+    (2, 'Método para análisis de toxicidad', 'http://example.com/doc2', '2024-01-02 00:00:00', 'Media', 'Método B', 'Media');
+
+-- Tabla pago
+INSERT INTO pago (id_pago, estado, fecha_pago, metodo_pago, monto_total)
+VALUES
+    (1, 'COMPLETADO', '2024-01-01', 'CREDITO', 100.0),
+    (2, 'PENDIENTE', '2024-01-02', 'TRANSFERENCIA', 150.0);
+
+-- Tabla producto
+INSERT INTO producto (id_producto, fecha_venta, nombre, stock)
+VALUES
+    (1, '2024-01-01', 'Producto A', 'EN_STOCK'),
+    (2, '2024-01-02', 'Producto B', 'AGOTADO');
+
+-- Tabla catalogo_precio
+INSERT INTO catalogo_precio (id_precio, fecha_efectiva, precio, producto_id_producto)
+VALUES
+    (1, '2024-01-01', 50.0, 1),
+    (2, '2024-01-02', 75.0, 2);
+
+-- Tabla categoria_producto
+INSERT INTO categoria_producto (id_categoria, nombre_categoria, producto_id_producto)
 VALUES
     (1, 'Categoria 1', 1),
     (2, 'Categoria 2', 2);
 
--- Insertar en la tabla catalogo_precio
-INSERT INTO catalogo_precio (Precio, Fecha_Efectiva, Producto_ID_Producto)
+-- Tabla control_calidad
+INSERT INTO control_calidad (id_control, estado, fecha, resultado, cliente_ruc, producto_id_producto)
 VALUES
-    (50.00, '2024-09-27', 1),
-    (75.00, '2024-09-27', 2);
+    (1, 'APROBADO', '2024-01-01', 'Resultado A', '98354231024', 1),
+    (2, 'EN_PRUEBAS', '2024-01-02', 'Resultado B', '98354231025', 2);
 
--- Insertar en la tabla control_calidad con enum de estado de control
-INSERT INTO control_calidad (Fecha, Resultado, Estado, Producto_ID_Producto, cliente_ruc)
+-- Tabla control_calidad_metodo_analitico
+INSERT INTO control_calidad_metodo_analitico (control_calidad_id, metodo_analitico_id)
 VALUES
-    ('2024-09-27', 'Eficiente', 'APROBADO', 1, '98354231024'),
-    ('2024-09-27', 'Eficiente', 'EN_PRUEBAS', 2, '98354231025');
+    (1, 1),
+    (2, 2);
 
--- Insertar en la tabla entrega_muestra con enum de estado de entrega
-INSERT INTO entrega_muestra (Fecha, Lugar, Estado, created_at, updated_at, Cliente_RUC, Producto_ID_Producto)
+-- Tabla entrega_muestra
+INSERT INTO entrega_muestra (id_entrega, created_at, estado, fecha, lugar, updated_at, cliente_ruc, producto_id_producto)
 VALUES
-    ('2024-09-27', 'Farmacia Ejemplo', 'ENTREGADO', '2024-09-25 14:32:00', '2024-09-27 09:00:00', '98354231024', 1);
+    (1, '2024-01-01 08:00:00', 'PENDIENTE', '2024-01-01', 'Ubicación A', '2024-01-01 10:00:00', '98354231024', 1),
+    (2, '2024-01-02 08:00:00', 'ENTREGADO', '2024-01-02', 'Ubicación B', '2024-01-02 12:00:00', '98354231025', 2);
 
--- Insertar en la tabla no_conformidad asociada a una entrega de muestra
-INSERT INTO no_conformidad (descripcion_problema, fecha_deteccion, causa_raiz, acciones_correctivas, resultado_seguimiento, critico, entrega_muestra_id)
+-- Tabla formula_desarrollada
+INSERT INTO formula_desarrollada (id_formula, beneficios, diferencias, fecha_desarrollo, ingredientes_clave, nombre, producto_id)
 VALUES
-    ('Producto dañado durante el transporte', '2024-09-28', 'Transporte inadecuado', 'Mejorar el embalaje', 'Se han implementado cambios en el embalaje', TRUE, 1),
-    ('Defecto en la formulación', '2024-09-29', 'Error en el proceso de producción', 'Ajustar los parámetros de producción', 'Se ajustaron los parámetros de producción y se evitó el defecto', FALSE, 1);
+    (1, 'Beneficio A', 'Diferencia A', '2024-01-01 00:00:00', 'Ingrediente X', 'Fórmula A', 1),
+    (2, 'Beneficio B', 'Diferencia B', '2024-01-02 00:00:00', 'Ingrediente Y', 'Fórmula B', 2);
 
--- Insertar en la tabla pago con enums de metodo de pago y estado de pago
-INSERT INTO pago (Monto_Total, Fecha_Pago, Metodo_Pago, Estado)
+-- Tabla no_conformidad
+INSERT INTO no_conformidad (id_no_conformidad, acciones_correctivas, causa_raiz, critico, descripcion_problema, fecha_deteccion, resultado_seguimiento, entrega_muestra_id)
 VALUES
-    (100.00, '2024-09-27', 'CREDITO', 'COMPLETADO'),
-    (150.00, '2024-09-27', 'TRANSFERENCIA', 'PENDIENTE');
+    (1, 'Acción A', 'Causa A', TRUE, 'Problema A', '2024-01-01 00:00:00', 'Seguimiento A', 1),
+    (2, 'Acción B', 'Causa B', FALSE, 'Problema B', '2024-01-02 00:00:00', 'Seguimiento B', 2);
 
--- Insertar en la tabla venta
-INSERT INTO venta (Fecha, Hora, Pago_Id_Pago)
+-- Tabla regulacion
+INSERT INTO regulacion (id_regulacion, estado_auditoria, fecha_auditoria, nombre_regulacion, producto_id_producto)
 VALUES
-    ('2024-09-27', '12:00:00', 1),
-    ('2024-09-27', '13:00:00', 2);
+    (1, 'COMPLETO', '2024-01-01', 'Regulación A', 1),
+    (2, 'PENDIENTE', '2024-01-02', 'Regulación B', 2);
 
--- Insertar en la tabla detalle_venta
-INSERT INTO detalle_venta (ID_Detalle_Venta, ID_Venta, Producto_ID_Producto, Cliente_RUC, Cantidad, Precio)
+-- Tabla reporte
+INSERT INTO reporte (id, enviado, estado_reporte, fecha_creacion)
 VALUES
-    (1, 1, 1, '98354231024', 2, 50.00),
-    (2, 2, 2, '98354231025', 1, 75.00);
+    (1, TRUE, 'APROBADO', '2024-01-01 00:00:00'),
+    (2, FALSE, 'PENDIENTE', '2024-01-02 00:00:00');
 
--- Insertar en la tabla regulacion con enum de estado de auditoría
-INSERT INTO regulacion (Nombre_Regulacion, Fecha_Auditoria, Estado_Auditoria, Producto_ID_Producto)
+-- Tabla reporte_auditoria_interna
+INSERT INTO reporte_auditoria_interna (impacto, inconformidades, recomendaciones, id)
 VALUES
-    ('Regulacion A', '2024-09-27', 'COMPLETO', 1),
-    ('Regulacion B', '2024-09-27', 'PENDIENTE', 2);
+    ('ALTO', 'Inconformidad A', 'Recomendación A', 1),
+    ('MEDIO', 'Inconformidad B', 'Recomendación B', 2);
 
--- Insertar en la tabla entrevista
-INSERT INTO entrevista (fecha, hora, lugar_sede, representante_dni, cliente_ruc)
+-- Tabla reporte_cumplimiento_regulatorio
+INSERT INTO reporte_cumplimiento_regulatorio (acciones_correctivas, contenido_auditoria, id, producto_id)
 VALUES
-    ('2024-09-27', '12:00:00', 'Oficina Ejemplo', '12345678', '98354231024'),
-    ('2024-09-27', '13:00:00', 'Oficina Ejemplo', '87654321', '98354231025');
+    ('Acción Correctiva A', 'Contenido A', 1, 1),
+    ('Acción Correctiva B', 'Contenido B', 2, 2);
 
+-- Tabla roles
+INSERT INTO roles (id, name)
+VALUES
+    (1, 'REPRESENTANTE');
+
+-- Tabla representante
+INSERT INTO representante (dni, contraseña, email, intentos, nombre, sede_asignada, laboratorio_ruc, role_id)
+VALUES
+    ('12345678', 'pass123', 'representante1@ejemplo.com', 0, 'Representante A', 'Sede A', '12345678901', 1),
+    ('87654321', 'pass456', 'representante2@ejemplo.com', 1, 'Representante B', 'Sede B', '12345678902', 1);
+
+-- Tabla entrevista
+INSERT INTO entrevista (id_entrevista, fecha, hora, lugar_sede, cliente_ruc, representante_dni)
+VALUES
+    (1, '2024-01-01', '10:00:00', 'Sede A', '98354231024', '12345678'),
+    (2, '2024-01-02', '11:00:00', 'Sede B', '98354231025', '87654321');
+
+-- Tabla login_attempt
+INSERT INTO login_attempt (id, attempt_time, device, ip_address, is_suspicious, location, representante_id)
+VALUES
+    (1, '2024-01-01 10:00:00', 'PC', '192.168.1.1', FALSE, 'Ubicación A', '12345678'),
+    (2, '2024-01-02 11:00:00', 'Laptop', '192.168.1.2', TRUE, 'Ubicación B', '87654321');
+
+-- Tabla venta
+INSERT INTO venta (id_venta, fecha, hora, pago_id_pago)
+VALUES
+    (1, '2024-01-01', '10:00:00', 1),
+    (2, '2024-01-02', '11:00:00', 2);
+
+-- Tabla detalle_venta
+INSERT INTO detalle_venta (id_detalle_venta, cantidad, precio, cliente_ruc, producto_id_producto, id_venta)
+VALUES
+    (1, 2, 50.0, '98354231024', 1, 1),
+    (2, 1, 75.0, '98354231025', 2, 2);
+
+-- Tabla orden
+INSERT INTO orden (id, estado, fecha_actualizacion, problema, cliente_ruc, id_detalle_venta)
+VALUES
+    (1, 'ENTREGADO', '2024-01-02 00:00:00', 'Problema A', '98354231024', 1),
+    (2, 'PENDIENTE', '2024-01-03 00:00:00', 'Problema B', '98354231025', 2);
