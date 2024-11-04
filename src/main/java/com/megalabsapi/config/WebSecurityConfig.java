@@ -45,6 +45,8 @@ public class WebSecurityConfig{
                         .requestMatchers(antMatcher("/auth/recover-password")).permitAll()
                         .requestMatchers(antMatcher("/auth/verify-code")).permitAll()
                         .requestMatchers(antMatcher("/calendario/**")).permitAll()
+                        .requestMatchers(antMatcher("/control-calidad/**")).permitAll()
+                        .requestMatchers(antMatcher("/entrega-muestra/**")).permitAll()
                         .requestMatchers("/api/v1/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**").permitAll()
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
