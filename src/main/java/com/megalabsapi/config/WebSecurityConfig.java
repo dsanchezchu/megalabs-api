@@ -20,7 +20,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+
+
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -68,6 +75,20 @@ public class WebSecurityConfig{
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    // Configuración de CORS para permitir solicitudes de localhost:3000
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:*")); // Permite cualquier puerto en localhost
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
+        configuration.setAllowedHeaders(List.of("*")); // Permite todos los encabezados
+        configuration.setAllowCredentials(true); // Permite enviar cookies o credenciales
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); // Aplica CORS a todos los endpoints
+        return source;
     }
 }
 

@@ -2,6 +2,7 @@ package com.megalabsapi.api;
 import com.megalabsapi.model.entity.EncuestaRecojo;
 import com.megalabsapi.service.EncuestaRecojoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,11 +15,13 @@ public class EncuestaRecojoController {
     @Autowired
     private EncuestaRecojoService encuestaRecojoService;
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PostMapping
     public EncuestaRecojo crearEncuesta(@RequestBody EncuestaRecojo encuesta) {
         return encuestaRecojoService.guardarEncuesta(encuesta);
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/reporte")
     public Map<String, Double> obtenerReporte() {
         return Map.of(
@@ -29,6 +32,7 @@ public class EncuestaRecojoController {
         );
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping
     public List<EncuestaRecojo> listarEncuestas() {
         return encuestaRecojoService.obtenerTodasEncuestas();

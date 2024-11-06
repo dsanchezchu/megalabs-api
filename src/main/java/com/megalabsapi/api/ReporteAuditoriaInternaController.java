@@ -6,6 +6,7 @@ import com.megalabsapi.service.NotificationService;
 import com.megalabsapi.service.ReporteAuditoriaInternaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,16 +24,19 @@ public class ReporteAuditoriaInternaController {
         this.notificationService = notificationService;
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PostMapping("/crear")
     public ResponseEntity<ReporteAuditoriaInterna> crearReporte(@RequestBody ReporteAuditoriaInterna auditoria) {
         return ResponseEntity.ok(auditoriaService.crearReporte(auditoria));
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PutMapping("/{id}/clasificar-impacto")
     public ResponseEntity<ReporteAuditoriaInterna> clasificarImpacto(@PathVariable Integer id, @RequestBody String impacto) {
         return ResponseEntity.ok(auditoriaService.clasificarImpacto(id, impacto));
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PutMapping("/{id}/inconformidades-recomendaciones")
     public ResponseEntity<ReporteAuditoriaInterna> registrarInconformidadesYRecomendaciones(
             @PathVariable Integer id,
@@ -41,6 +45,7 @@ public class ReporteAuditoriaInternaController {
         return ResponseEntity.ok(auditoriaService.registrarInconformidadesYRecomendaciones(id, inconformidades, recomendaciones));
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PutMapping("/enviar")
     public ResponseEntity<ReporteAuditoriaInterna> enviarReporte(@RequestBody EnviarReporteRequest request) {
         ReporteAuditoriaInterna reporte = auditoriaService.enviarReporte(request.getId());
@@ -55,6 +60,7 @@ public class ReporteAuditoriaInternaController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/enviados")
     public ResponseEntity<List<ReporteAuditoriaInterna>> obtenerReportesEnviados() {
         return ResponseEntity.ok(auditoriaService.obtenerReportesEnviados());

@@ -6,6 +6,7 @@ import com.megalabsapi.service.NotificationService;
 import com.megalabsapi.service.ReporteCumplimientoRegulatorioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,21 +24,25 @@ public class ReporteCumplimientoRegulatorioController {
         this.notificationService = notificationService;
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PostMapping("/crear")
     public ResponseEntity<ReporteCumplimientoRegulatorio> crearReporte(@RequestBody ReporteCumplimientoRegulatorio reporte) {
         return ResponseEntity.ok(cumplimientoService.crearReporte(reporte));
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PutMapping("/{id}/aprobar")
     public ResponseEntity<ReporteCumplimientoRegulatorio> aprobarReporte(@PathVariable Integer id, @RequestBody boolean aprobado) {
         return ResponseEntity.ok(cumplimientoService.aprobarReporte(id, aprobado));
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/{id}/generar-pdf")
     public ResponseEntity<String> generarReporteParaAutoridades(@PathVariable Integer id) {
         return ResponseEntity.ok(cumplimientoService.generarReporteParaAutoridades(id));
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PutMapping("/enviar")
     public ResponseEntity<ReporteCumplimientoRegulatorio> enviarReporte(@RequestBody EnviarReporteRequest request) {
         ReporteCumplimientoRegulatorio reporte = cumplimientoService.enviarReporte(request.getId());
@@ -52,6 +57,7 @@ public class ReporteCumplimientoRegulatorioController {
     }
 
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/enviados")
     public ResponseEntity<List<ReporteCumplimientoRegulatorio>> obtenerReportesEnviados() {
         return ResponseEntity.ok(cumplimientoService.obtenerReportesEnviados());

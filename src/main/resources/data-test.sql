@@ -120,8 +120,8 @@ VALUES
 -- Tabla representante
 INSERT INTO representante (dni, contraseña, email, intentos, nombre, sede_asignada, laboratorio_ruc, role_id)
 VALUES
-    ('12345678', 'pass123', 'representante1@ejemplo.com', 0, 'Representante A', 'Sede A', '12345678901', 1),
-    ('87654321', 'pass456', 'representante2@ejemplo.com', 1, 'Representante B', 'Sede B', '12345678902', 1);
+    ('12345678', '$2a$10$ToSSvVMYPdBtTA71ZcrcPOxSUQiGYh5pLroAeOEt3MTidutlyWl/C', 'representante1@ejemplo.com', 0, 'Representante A', 'Sede A', '12345678901', 1),
+    ('87654321', '$2a$10$EjRlBJ83z14Z6DDfCglKOe2LomJxRT/uPZimRDgeTE/zU0FcpdJtG', 'representante2@ejemplo.com', 1, 'Representante B', 'Sede B', '12345678902', 1);
 
 -- Tabla entrevista
 INSERT INTO entrevista (id_entrevista, fecha, hora, lugar_sede, cliente_ruc, representante_dni)
