@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/auditorias")
+@RequestMapping("/reportes/auditoria-interna")
 public class ReporteAuditoriaInternaController {
 
     private final ReporteAuditoriaInternaService auditoriaService;
@@ -64,6 +64,12 @@ public class ReporteAuditoriaInternaController {
     @GetMapping("/enviados")
     public ResponseEntity<List<ReporteAuditoriaInterna>> obtenerReportesEnviados() {
         return ResponseEntity.ok(auditoriaService.obtenerReportesEnviados());
+    }
+
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
+    @GetMapping("/todos")
+    public ResponseEntity<List<ReporteAuditoriaInterna>> obtenerTodosLosReportes() {
+        return ResponseEntity.ok(auditoriaService.obtenerTodos());
     }
 }
 

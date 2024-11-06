@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/reportes-cumplimiento")
+@RequestMapping("/reportes/cumplimiento-regulatorio")
 public class ReporteCumplimientoRegulatorioController {
 
     private final ReporteCumplimientoRegulatorioService cumplimientoService;
@@ -61,6 +61,13 @@ public class ReporteCumplimientoRegulatorioController {
     @GetMapping("/enviados")
     public ResponseEntity<List<ReporteCumplimientoRegulatorio>> obtenerReportesEnviados() {
         return ResponseEntity.ok(cumplimientoService.obtenerReportesEnviados());
+    }
+
+
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
+    @GetMapping("/todos")
+    public ResponseEntity<List<ReporteCumplimientoRegulatorio>> obtenerTodosLosReportes() {
+        return ResponseEntity.ok(cumplimientoService.obtenerTodos());
     }
 }
 

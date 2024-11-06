@@ -35,4 +35,9 @@ public class ReporteServiceImpl<T extends Reporte> implements ReporteService<T> 
     public List<T> obtenerReportesEnviados() {
         return repository.findAll().stream().filter(Reporte::isEnviado).toList();
     }
+
+    @Override
+    public List<T> obtenerTodos() {
+        return repository.findAll();
+    }
 }
