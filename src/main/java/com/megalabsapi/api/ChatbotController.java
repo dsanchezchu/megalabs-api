@@ -5,6 +5,7 @@ import com.megalabsapi.model.entity.Producto;
 import com.megalabsapi.repository.ProductoRepository;
 import com.megalabsapi.service.FormulaDesarrolladaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class ChatbotController {
     @Autowired
     private FormulaDesarrolladaService formulaService;
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/consultaPorProducto")
     public List<Formula_Desarrollada> consultarFormulasPorProducto(@RequestParam Integer productoId) {
         Optional<Producto> producto = formulaService.buscarProductoPorId(productoId);  // Buscar el producto por ID
@@ -27,6 +29,7 @@ public class ChatbotController {
         }
     }
 
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/comparar")
     public String compararFormulas(@RequestParam Integer idNueva, @RequestParam Integer idAnterior) {
         Optional<Formula_Desarrollada> nueva = formulaService.buscarPorId(idNueva);

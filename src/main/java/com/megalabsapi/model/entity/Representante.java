@@ -1,5 +1,6 @@
 package com.megalabsapi.model.entity;
 
+import jakarta.validation.constraints.Email;
 import lombok.Data;
 import jakarta.persistence.*;
 
@@ -32,6 +33,7 @@ public class Representante {
     @Column(name = "intentos", nullable = false)
     private int intentosFallidos;
 
+    @Email
     @Column(name = "email", nullable = false, length = 100)  // Ajuste de longitud para correos electrónicos largos
     private String email;
 }

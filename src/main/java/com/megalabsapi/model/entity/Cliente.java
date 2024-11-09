@@ -22,7 +22,10 @@ public class Cliente {
     @Column(name = "Especializacion", nullable = false)
     private String especializacion;
 
-//     Relación uno a muchos con Entrega_Muestra
-//    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Entrega_Muestra> entregasMuestra;
+    @Column(name = "Email", nullable = false)
+    private String email; // Nuevo campo para almacenar el correo electrónico del cliente
+
+    // Relación uno a muchos con Entrega_Muestra
+    // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // private List<Entrega_Muestra> entregasMuestra;
 }
