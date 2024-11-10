@@ -57,6 +57,7 @@ public class WebSecurityConfig{
                         .requestMatchers(antMatcher("/productos/**")).permitAll()
                         .requestMatchers(antMatcher("/catalogo/**")).permitAll()
                         .requestMatchers(antMatcher("/admin/**")).permitAll()
+                        .requestMatchers(antMatcher("/programacion/**")).permitAll()
                         .requestMatchers("/api/v1/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**").permitAll()
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()
