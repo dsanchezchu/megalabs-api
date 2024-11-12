@@ -23,7 +23,7 @@ public class DetalleVentaController {
     @Autowired
     private DetalleVentaRepository detalleVentaRepository;
 
-    private DetalleVentaService detalleVentaService;
+
 
     @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/reporte")
