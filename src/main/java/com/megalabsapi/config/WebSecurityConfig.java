@@ -54,6 +54,8 @@ public class WebSecurityConfig{
                         .requestMatchers(antMatcher("/calendario/**")).permitAll()
                         .requestMatchers(antMatcher("/control-calidad/**")).permitAll()
                         .requestMatchers(antMatcher("/entrega-muestra/**")).permitAll()
+                        .requestMatchers(antMatcher("/citas/**")).permitAll()
+                        .requestMatchers(antMatcher("/ordenes/**")).permitAll()
                         .requestMatchers(antMatcher("/productos/**")).permitAll()
                         .requestMatchers(antMatcher("/catalogo/**")).permitAll()
                         .requestMatchers(antMatcher("/admin/**")).permitAll()
