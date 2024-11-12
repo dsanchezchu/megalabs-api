@@ -21,5 +21,8 @@ public class PasswordRecoveryToken {
 
     @Column(name = "expiry_date", nullable = false)
     private Timestamp expiryDate;
+
+    @Column(name = "is_used", nullable = false)
+    private boolean isUsed = false;
 }
 

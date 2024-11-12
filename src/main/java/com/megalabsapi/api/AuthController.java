@@ -2,14 +2,12 @@ package com.megalabsapi.api;
 
 import com.megalabsapi.dto.*;
 import com.megalabsapi.model.entity.LoginAttempt;
+import com.megalabsapi.model.entity.PasswordRecoveryToken;
 import com.megalabsapi.model.entity.VerificationCode;
-import com.megalabsapi.repository.RepresentanteRepository;
-import com.megalabsapi.repository.RoleRepository;
+import com.megalabsapi.repository.PasswordRecoveryTokenRepository;
 import com.megalabsapi.repository.VerificationCodeRepository;
 import com.megalabsapi.security.TokenProvider;
-import com.megalabsapi.service.LoginAttemptService;
-import com.megalabsapi.service.NotificationService;
-import com.megalabsapi.service.UserService;
+import com.megalabsapi.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +19,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import com.megalabsapi.model.entity.Representante;
-import com.megalabsapi.service.RepresentanteService;
 
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")
@@ -38,11 +33,9 @@ public class AuthController {
     @Autowired
     private RepresentanteService representanteService;
     @Autowired
-    private RepresentanteRepository representanteRepository;
+    private PasswordRecoveryTokenRepository tokenRepository;
     @Autowired
-    private NotificationService notificationService;
-    @Autowired
-    private RoleRepository roleRepository;
+    private PasswordRecoveryService passwordRecoveryService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -50,7 +43,7 @@ public class AuthController {
     @Autowired
     private LoginAttemptService loginAttemptService;
     @Autowired
-    private TokenProvider tokenProvider; // Reemplazamos JwtService con TokenProvider
+    private TokenProvider tokenProvider;
 
     // Endpoint para iniciar sesión
 
@@ -83,24 +76,56 @@ public class AuthController {
 
     @PostMapping("/recover-password")
     public ResponseEntity<String> recoverPassword(@RequestBody RecoverPasswordRequestDTO recoverPasswordRequest) {
-        Representante representante = representanteRepository.findByEmail(recoverPasswordRequest.getEmail()).orElse(null);
+        try {
+            // Delegar la lógica al servicio de recuperación de contraseñas
+            passwordRecoveryService.createPasswordRecoveryToken(recoverPasswordRequest.getEmail());
+            return ResponseEntity.ok("Se ha enviado un enlace de recuperación a su correo electrónico");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Ocurrió un error al procesar la solicitud");
+        }
+    }
 
-        if (representante == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Correo electrónico no encontrado");
+    @PostMapping("/verify-recovery-token")
+    public ResponseEntity<?> verifyRecoveryToken(@RequestParam String token, @RequestBody ResetPasswordRequestDTO resetPasswordRequest) {
+        // Buscar el token de recuperación en la base de datos
+        Optional<PasswordRecoveryToken> optionalToken = tokenRepository.findByToken(token);
+
+        if (optionalToken.isEmpty()) {
+            return ResponseEntity.badRequest().body("Token inválido o no encontrado.");
         }
 
-        String recoveryToken = UUID.randomUUID().toString();
-        String encodedToken = URLEncoder.encode(recoveryToken, StandardCharsets.UTF_8);
-        String recoveryUrl = "http://localhost:8080/recover-password?token=" + encodedToken;
+        PasswordRecoveryToken recoveryToken = optionalToken.get();
 
-        String message = String.format("Hola %s,\n\nHaga clic en el siguiente enlace para recuperar su contraseña:\n%s",
-                representante.getNombre(),
-                recoveryUrl);
+        // Validar si el token ha expirado
+        if (recoveryToken.getExpiryDate().before(Timestamp.from(Instant.now()))) {
+            return ResponseEntity.badRequest().body("El token ha expirado.");
+        }
 
-        notificationService.sendRecoveryEmail(representante.getEmail(), message);
+        // Validar si el token ya fue utilizado
+        if (recoveryToken.isUsed()) {
+            return ResponseEntity.badRequest().body("El token ya fue utilizado.");
+        }
 
-        return ResponseEntity.ok("Se ha enviado un enlace de recuperación a su correo electrónico");
+        // Validar si el token corresponde al correo electrónico proporcionado
+        if (!recoveryToken.getRepresentante().getEmail().equals(resetPasswordRequest.getEmail())) {
+            return ResponseEntity.badRequest().body("El token no corresponde al correo proporcionado.");
+        }
+
+        // Marcar el token como usado
+        recoveryToken.setUsed(true);
+        tokenRepository.save(recoveryToken);
+
+        // Actualizar credenciales
+        Representante representante = recoveryToken.getRepresentante();
+        representanteService.actualizarCredenciales(representante, resetPasswordRequest.getNewPassword(), representante.getEmail());
+
+        return ResponseEntity.ok("Credenciales actualizadas exitosamente.");
     }
+
+
+
 
     @PostMapping("/verify-code")
     public ResponseEntity<String> verifyCode(@RequestBody VerifyCodeRequestDTO verifyCodeRequest) {
@@ -147,7 +172,6 @@ public class AuthController {
     }
 
 
-    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @PostMapping("/actualizar-credenciales")
     public ResponseEntity<String> actualizarCredenciales(
             @RequestHeader("Authorization") String token,
@@ -161,6 +185,7 @@ public class AuthController {
         if (representante == null) {
             return ResponseEntity.badRequest().body("Representante no encontrado");
         }
+
 
         representanteService.actualizarCredenciales(representante, request.getNuevaContraseña(), request.getNuevoEmail());
 
