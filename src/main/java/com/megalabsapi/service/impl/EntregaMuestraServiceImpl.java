@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class EntregaMuestraServiceImpl implements EntregaMuestraService {
-    //Debeen llevar la anotcion sprimframework, implementa la inyeccion de dependencias mediante la gestion de objetos
-    //Elimina las instancias que no se usan, para spring detecte el contexto, debe usarse las anotacion
-    //Depende de 1 o más repositorios
+
     private final EntregaMuestraRepository entregaMuestraRepository;
 
     @Transactional(readOnly = true)
@@ -94,3 +92,5 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
     }
 
 }
+
+

@@ -1,5 +1,6 @@
 package com.megalabsapi.api;
 
+import com.megalabsapi.service.DetalleVentaService;
 import com.megalabsapi.model.entity.Detalle_Venta;
 import com.megalabsapi.repository.DetalleVentaRepository;
 import com.megalabsapi.service.impl.DetalleVentaServiceImpl;
@@ -7,6 +8,7 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +23,9 @@ public class DetalleVentaController {
     @Autowired
     private DetalleVentaRepository detalleVentaRepository;
 
+    private DetalleVentaService detalleVentaService;
+
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/reporte")
     public ResponseEntity<List<Object[]>> obtenerReporteVentas() {
         List<Object[]> reporte = detalleVentaService.obtenerReporteVentas();

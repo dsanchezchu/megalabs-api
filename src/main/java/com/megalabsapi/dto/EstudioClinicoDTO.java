@@ -58,3 +58,4 @@ public class EstudioClinicoDTO {
         this.resultado = resultado;
     }
 }
+

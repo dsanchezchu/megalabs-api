@@ -1,9 +1,8 @@
 package com.megalabsapi.service;
+
 import java.sql.Date;
 import java.util.List;
 import com.megalabsapi.model.entity.Entrevista;
-import org.springframework.stereotype.Service;
-
 
 public interface EntrevistaService {
     List<Entrevista> obtenerEntrevistasPorRepresentante(String dniRepresentante);

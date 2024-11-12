@@ -1,9 +1,6 @@
 package com.megalabsapi.service;
 
 import com.megalabsapi.dto.EstudioClinicoDTO;
-import com.megalabsapi.model.entity.Control_Calidad;
-import org.springframework.stereotype.Service;
-
 import java.sql.Date;
 import java.util.List;
 
@@ -14,3 +11,5 @@ public interface ControlCalidadService {
 
     List<EstudioClinicoDTO> buscarPorFecha(Date fechaInicio, Date fechaFin);
 }
+
+

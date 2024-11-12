@@ -36,7 +36,7 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
     }
 
     public void sendDetalleVendaConfirmationEmil(Detalle_Venta detalleVenta) throws MessagingException {
-        String userEmail = detalleVenta.getCliente().getCorreo();
+        String userEmail = detalleVenta.getCliente().getEmail();
         Map<String, Object> model = new HashMap<>();
         model.put("clienteCorreo",userEmail);
         model.put("clienteNombre", detalleVenta.getCliente().getNombre());

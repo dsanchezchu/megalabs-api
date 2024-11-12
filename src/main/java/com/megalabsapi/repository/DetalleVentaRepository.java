@@ -9,6 +9,4 @@ import java.util.List;
 public interface DetalleVentaRepository extends JpaRepository<Detalle_Venta, Integer> {
     @Query("SELECT d.producto.idProducto, SUM(d.cantidad) as totalVentas FROM Detalle_Venta d GROUP BY d.producto.idProducto")
     List<Object[]> obtenerReporteVentas();
-
-
 }

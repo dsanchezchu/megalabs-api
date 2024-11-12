@@ -72,9 +72,7 @@ public class EntregaMuestraController {
         List<Entrega_Muestra> fechaFiltro = entregaMuestraService.findByFecha(fecha);
         return ResponseEntity.ok(fechaFiltro);
     }
-    
-    
-    
+
 
     @GetMapping("/ruc/{ruc}")
     public ResponseEntity<List<EntregaMuestraDTO>> obtenerEntregasPorCliente(@PathVariable String ruc) {
