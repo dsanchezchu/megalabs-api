@@ -22,6 +22,7 @@ public class Cliente {
     @Column(name = "Especializacion", nullable = false)
     private String especializacion;
 
+
     @Column(name = "Email", nullable = false)
     private String email; // Nuevo campo para almacenar el correo electrónico del cliente
 

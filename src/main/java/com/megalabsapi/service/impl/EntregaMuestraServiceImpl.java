@@ -35,7 +35,7 @@ public class EntregaMuestraServiceImpl implements EntregaMuestraService {
 
     @Override
     public List<Entrega_Muestra> findByFecha(Date fecha) {
-        return entregaMuestraRepository.findByFecha(fecha);
+        return entregaMuestraRepository.    findByFecha(fecha);
     }
 
     @Transactional

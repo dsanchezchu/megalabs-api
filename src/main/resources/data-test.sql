@@ -22,6 +22,7 @@ VALUES
     ('12345678901', 'Av. Ejemplo 123', 'NRM-001', '987654321'),
     ('12345678902', 'Calle Ejemplo 456', 'NRM-002', '123456789');
 
+
 -- Tabla medicamento
 INSERT INTO medicamento (id, cantidad, laboratorio, nombre)
 VALUES
