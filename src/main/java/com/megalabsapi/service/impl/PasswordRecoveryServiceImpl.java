@@ -32,7 +32,7 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
     private final TemplateEngine templateEngine;
     private final EmailService emailService; // Asegúrate de que sea final para la inyección de dependencias
 
-    @Value("${app.base-url}")
+    @Value("${megalabas-api.openapi.dev-url}")
     private String baseUrl;
 
     @Value("${token.expiration.time}")
@@ -71,7 +71,7 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
 
         // Codificar el token para la URL de recuperación
         String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
-        String recoveryUrl = baseUrl + "/api/v1/auth/verify-recovery-token?token=" + encodedToken;
+        String recoveryUrl = baseUrl + "/auth/verify-recovery-token?token=" + encodedToken;
 
         // Preparar el modelo con los datos para el correo
         Map<String, Object> model = new HashMap<>();
