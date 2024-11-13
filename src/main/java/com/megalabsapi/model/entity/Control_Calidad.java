@@ -4,6 +4,7 @@ import com.megalabsapi.model.enums.ControlCalidadStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @Entity
@@ -27,4 +28,17 @@ public class Control_Calidad {
     @ManyToOne
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
+
+    @ManyToOne
+    @JoinColumn(name = "cliente_ruc", referencedColumnName = "RUC", nullable = false)
+    private Cliente cliente;
+
+    // Relación muchos a muchos con MetodoAnalitico
+    @ManyToMany
+    @JoinTable(
+            name = "control_calidad_metodo_analitico",
+            joinColumns = @JoinColumn(name = "control_calidad_id"),
+            inverseJoinColumns = @JoinColumn(name = "metodo_analitico_id")
+    )
+    private List<MetodoAnalitico> metodosAnaliticos;
 }
