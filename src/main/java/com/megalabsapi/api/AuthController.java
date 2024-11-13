@@ -1,6 +1,7 @@
 package com.megalabsapi.api;
 
 import com.megalabsapi.dto.*;
+import com.megalabsapi.exception.ResourceNotFoundException;
 import com.megalabsapi.model.entity.LoginAttempt;
 import com.megalabsapi.model.entity.PasswordRecoveryToken;
 import com.megalabsapi.model.entity.VerificationCode;
@@ -15,7 +16,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.*;
 import com.megalabsapi.model.entity.Representante;
@@ -87,9 +90,8 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/verify-recovery-token")
-    public ResponseEntity<?> verifyRecoveryToken(@RequestParam String token, @RequestBody ResetPasswordRequestDTO resetPasswordRequest) {
-        // Buscar el token de recuperación en la base de datos
+    @GetMapping("/verify-recovery-token")
+    public ResponseEntity<?> verifyRecoveryToken(@RequestParam String token) {
         Optional<PasswordRecoveryToken> optionalToken = tokenRepository.findByToken(token);
 
         if (optionalToken.isEmpty()) {
@@ -98,31 +100,36 @@ public class AuthController {
 
         PasswordRecoveryToken recoveryToken = optionalToken.get();
 
-        // Validar si el token ha expirado
         if (recoveryToken.getExpiryDate().before(Timestamp.from(Instant.now()))) {
             return ResponseEntity.badRequest().body("El token ha expirado.");
         }
 
-        // Validar si el token ya fue utilizado
         if (recoveryToken.isUsed()) {
             return ResponseEntity.badRequest().body("El token ya fue utilizado.");
         }
 
-        // Validar si el token corresponde al correo electrónico proporcionado
-        if (!recoveryToken.getRepresentante().getEmail().equals(resetPasswordRequest.getEmail())) {
-            return ResponseEntity.badRequest().body("El token no corresponde al correo proporcionado.");
-        }
-
-        // Marcar el token como usado
         recoveryToken.setUsed(true);
         tokenRepository.save(recoveryToken);
 
-        // Actualizar credenciales
-        Representante representante = recoveryToken.getRepresentante();
-        representanteService.actualizarCredenciales(representante, resetPasswordRequest.getNewPassword(), representante.getEmail());
+        // Crear un objeto de autenticación simulado
+        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                recoveryToken.getRepresentante().getDni(),
+                null,
+                List.of(new SimpleGrantedAuthority("ROLE_REPRESENTANTE"))
+        );
 
-        return ResponseEntity.ok("Credenciales actualizadas exitosamente.");
+        // Generar un nuevo token JWT
+        String newToken = tokenProvider.createAccessToken(authentication);
+
+        // Crear el objeto AuthResponseDTO con los datos requeridos
+        String nombre = recoveryToken.getRepresentante().getNombre();
+        String role = "ROLE_REPRESENTANTE";
+        AuthResponseDTO response = new AuthResponseDTO(newToken, nombre, role);
+
+        return ResponseEntity.ok(response);
     }
+
+
 
 
 
@@ -172,23 +179,23 @@ public class AuthController {
     }
 
 
-    @PostMapping("/actualizar-credenciales")
-    public ResponseEntity<String> actualizarCredenciales(
-            @RequestHeader("Authorization") String token,
-            @RequestBody ActualizarCredencialesRequestDTO request) {
-
-        if (!tokenProvider.validateToken(token)) {  // Usamos TokenProvider para validar el token
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido o expirado");
-        }
-
-        Representante representante = representanteService.findByDni(request.getDni());
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
+    @PostMapping("/update-credentials")
+    public ResponseEntity<String> updateCredentials(@RequestBody ActualizarCredencialesRequestDTO updateCredentialsRequest) {
+        // Buscar al representante por DNI
+        Representante representante = representanteService.findByDni(updateCredentialsRequest.getDni());
         if (representante == null) {
-            return ResponseEntity.badRequest().body("Representante no encontrado");
+            throw new ResourceNotFoundException("No se encontró un representante con ese DNI");
         }
 
+        // Actualizar credenciales usando el nuevo correo proporcionado
+        representanteService.actualizarCredenciales(
+                representante,
+                updateCredentialsRequest.getNuevaContraseña(),
+                updateCredentialsRequest.getNuevoEmail()
+        );
 
-        representanteService.actualizarCredenciales(representante, request.getNuevaContraseña(), request.getNuevoEmail());
-
-        return ResponseEntity.ok("Credenciales actualizadas exitosamente");
+        return ResponseEntity.ok("Credenciales actualizadas exitosamente.");
     }
+
 }
