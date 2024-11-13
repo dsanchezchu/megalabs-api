@@ -17,4 +17,3 @@ public interface LoginAttemptRepository extends JpaRepository<LoginAttempt, Long
 }
 
 
-

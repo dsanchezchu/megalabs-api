@@ -25,6 +25,10 @@ public class Cliente {
     @Column(name = "Email", nullable = false)
     private String email; // Nuevo campo para almacenar el correo electrónico del cliente
 
+    // Relación uno a muchos con ProgramacionRecojo
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ProgramacionRecojo> programacionesRecojo;
+
     // Relación uno a muchos con Entrega_Muestra
     // @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     // private List<Entrega_Muestra> entregasMuestra;

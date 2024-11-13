@@ -1,5 +1,6 @@
 package com.megalabsapi.dto;
 
+
 import lombok.Data;
 import jakarta.validation.constraints.NotEmpty;
 

@@ -33,4 +33,3 @@ public interface VerificationService {
     void sendVerificationCode(String email);
 }
 
-

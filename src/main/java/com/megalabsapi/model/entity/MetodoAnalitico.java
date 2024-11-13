@@ -30,4 +30,3 @@ public class MetodoAnalitico {
     @Column(name = "documentacion_url", nullable = false, length = 255)
     private String documentacionUrl;  // URL de la documentación de validación
 }
-

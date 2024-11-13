@@ -20,4 +20,3 @@ public interface RepresentanteRepository extends JpaRepository<Representante, St
     boolean existsByEmail(String email);
 }
 
-

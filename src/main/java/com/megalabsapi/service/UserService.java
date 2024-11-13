@@ -50,4 +50,3 @@ public interface UserService {
      */
     UserProfileDTO getUserProfileByDni(String dni);
 }
-

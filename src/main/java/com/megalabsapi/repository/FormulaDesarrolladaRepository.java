@@ -11,4 +11,3 @@ import java.util.List;
 public interface FormulaDesarrolladaRepository extends JpaRepository<Formula_Desarrollada, Integer> {
     List<Formula_Desarrollada> findByProducto(Producto producto);
 }
-

@@ -33,4 +33,3 @@ public class UserRegistrationDTO {
     @NotBlank(message = "El rol es obligatorio")  // Agrega validación si es necesario
     private String roleName;  // Agrega este campo
 }
-

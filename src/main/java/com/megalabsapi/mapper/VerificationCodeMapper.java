@@ -32,4 +32,3 @@ public class VerificationCodeMapper {
         return verificationCode;
     }
 }
-
