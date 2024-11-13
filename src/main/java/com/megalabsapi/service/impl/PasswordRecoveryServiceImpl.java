@@ -71,7 +71,7 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
 
         // Codificar el token para la URL de recuperación
         String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
-        String recoveryUrl = baseUrl + "/recover-password?token=" + encodedToken;
+        String recoveryUrl = baseUrl + "/api/v1/auth/verify-recovery-token?token=" + encodedToken;
 
         // Preparar el modelo con los datos para el correo
         Map<String, Object> model = new HashMap<>();
