@@ -130,10 +130,6 @@ public class AuthController {
     }
 
 
-
-
-
-
     @PostMapping("/verify-code")
     public ResponseEntity<String> verifyCode(@RequestBody VerifyCodeRequestDTO verifyCodeRequest) {
         Optional<VerificationCode> optionalVerificationCode =
