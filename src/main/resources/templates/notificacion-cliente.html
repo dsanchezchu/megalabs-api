@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Hace que sea responsivo -->
+    <title>Notificación Megalabs</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7fc;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin: 15px 0;
+        }
+
+        .message {
+            background-color: #e7f5e1;
+            padding: 10px;
+            border-left: 5px solid #4CAF50;
+            font-weight: bold;
+            word-wrap: break-word; /* Para evitar que mensajes largos rompan el diseño */
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .footer img {
+            width: 100%;
+            max-width: 260px; /* Se ajusta automáticamente para pantallas más pequeñas */
+            height: auto;
+            margin-bottom: 15px;
+        }
+
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+
+            .message {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 18px;
+            }
+
+            p {
+                font-size: 13px;
+            }
+
+            .btn {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .footer img {
+                max-width: 200px; /* Imagen más pequeña en pantallas muy pequeñas */
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Notificación Megalabs</h1>
+    <p>Estimado/a <span th:text="${nombre}"></span>,</p>
+    <p>Del área de representante de ventas:</p>
+
+    <div class="message">
+        <p><span th:text="${message}"></span></p>
+    </div>
+
+    <p>Para cualquier duda visite nuestra pagina.</p>
+
+    <a href="https://www.megalabs.com" class="btn">Visite Megalabs</a>
+
+    <div class="footer">
+        <p>Este es un correo automático, por favor no responda.</p>
+        <p>Para más información, visita nuestro sitio web: <a href="https://www.megalabs.com">www.megalabs.com</a></p>
+    </div>
+    <div class="footer">
+        <img src="https://i.imgur.com/y9fvifd.png" alt="Megalabs Logo">
+        <p>© 2024 Megalabs. Todos los derechos reservados.</p>
+    </div>
+</div>
+</body>
+</html>

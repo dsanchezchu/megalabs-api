@@ -54,6 +54,7 @@ public class WebSecurityConfig{
                         .requestMatchers(antMatcher("/calendario/**")).permitAll()
                         .requestMatchers(antMatcher("/control-calidad/**")).permitAll()
                         .requestMatchers(antMatcher("/entrega-muestra/**")).permitAll()
+                        .requestMatchers(antMatcher("/notifications/**")).permitAll()
                         .requestMatchers(antMatcher("/citas/**")).permitAll()
                         .requestMatchers(antMatcher("/ordenes/**")).permitAll()
                         .requestMatchers(antMatcher("/productos/**")).permitAll()
@@ -61,6 +62,8 @@ public class WebSecurityConfig{
                         .requestMatchers(antMatcher("/admin/**")).permitAll()
                         .requestMatchers(antMatcher("/programacion/**")).permitAll()
                         .requestMatchers(antMatcher("/ventas/correo/**")).permitAll()
+                        .requestMatchers(antMatcher("/auth/verify-recovery-token")).permitAll()
+                        .requestMatchers(antMatcher("/auth/actualizar-credenciales")).permitAll()
                         .requestMatchers("/api/v1/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**", "/webjars/**").permitAll()
                         // Cualquier otra solicitud requiere autenticación
                         .anyRequest().authenticated()

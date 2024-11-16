@@ -1,4 +1,4 @@
-package com.megalabsapi.controller;
+package com.megalabsapi.api;
 
 import com.megalabsapi.model.entity.Regulacion;
 import com.megalabsapi.model.enums.AuditoriaStatus;
