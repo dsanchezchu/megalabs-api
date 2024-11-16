@@ -2,8 +2,6 @@ package com.megalabsapi.service;
 
 import jakarta.mail.MessagingException;
 
-import java.util.Map;
-
-public interface NotificacionRepresentanteService {
+public interface NotificacionClienteService {
     void sendMailRepresentante(String to, String message) throws MessagingException;
 }
