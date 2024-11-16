@@ -1,5 +1,6 @@
 package com.megalabsapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -15,10 +16,12 @@ public class Detalle_Venta {
 
     @ManyToOne
     @JoinColumn(name = "ID_Venta", referencedColumnName = "ID_Venta", nullable = false)
+    @JsonBackReference
     private Venta venta;
 
     @ManyToOne
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
+    @JsonBackReference
     private Producto producto;
 
     @ManyToOne

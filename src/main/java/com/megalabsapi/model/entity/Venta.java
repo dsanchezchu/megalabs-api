@@ -1,5 +1,6 @@
 package com.megalabsapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import jakarta.persistence.*;
 import java.sql.Date;
@@ -21,7 +22,8 @@ public class Venta {
     @Column(name = "Hora", nullable = false)
     private Time hora;
 
-    @OneToMany(mappedBy = "venta")
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<Detalle_Venta> detalleVenta;
 
     @ManyToOne
