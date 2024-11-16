@@ -12,6 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "entrega_Muestra")
 public class Entrega_Muestra {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Entrega")
@@ -25,9 +26,9 @@ public class Entrega_Muestra {
 
     @Column(name = "Estado", nullable = false)
     @Enumerated(EnumType.STRING)
-    private EntregaStatus estado; // Usando el enum
+    private EntregaStatus estado;
 
-    @Column(name = "created_at",nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
@@ -41,4 +42,14 @@ public class Entrega_Muestra {
     @JoinColumn(name = "Producto_ID_Producto", referencedColumnName = "ID_Producto", nullable = false)
     private Producto producto;
 
+    // Método para establecer las fechas automáticamente
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
