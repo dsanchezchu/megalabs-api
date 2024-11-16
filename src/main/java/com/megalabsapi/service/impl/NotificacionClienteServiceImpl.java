@@ -24,7 +24,7 @@ public class NotificacionClienteServiceImpl implements NotificacionClienteServic
     private String mainFrom;
 
     @Override
-    public void sendMailRepresentante(String to,  String message) throws MessagingException {
+    public void sendMailCliente(String to, String message) throws MessagingException {
         Optional<Cliente> cliente = clienteRepository.findByEmail(to);
         if (!cliente.isPresent()) {
             throw new MessagingException("El correo electrónico no está registrado en el sistema.");

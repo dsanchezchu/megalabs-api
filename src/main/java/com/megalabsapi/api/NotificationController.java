@@ -20,7 +20,7 @@ public class NotificationController {
     public String sendNotification(@RequestParam String email, @RequestParam String message) {
         try {
             // Llamar al servicio para enviar el correo
-            notificacionClienteService.sendMailRepresentante(email, message);
+            notificacionClienteService.sendMailCliente(email, message);
             return "Notificación enviada exitosamente a " + email;
         } catch (MessagingException e) {
             return "Error al enviar la notificación: " + e.getMessage();
