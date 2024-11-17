@@ -94,7 +94,7 @@ public class WebSecurityConfig{
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("http://localhost:*")); // Permite cualquier puerto en localhost
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:*", "https://megalabs-web.netlify.app")); // Permite cualquier puerto en localhost
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS")); // Métodos permitidos
         configuration.setAllowedHeaders(List.of("*")); // Permite todos los encabezados
         configuration.setAllowCredentials(true); // Permite enviar cookies o credenciales
