@@ -1,5 +1,6 @@
 package com.megalabsapi.api;
 
+import com.megalabsapi.dto.ReporteVentasDTO;
 import com.megalabsapi.service.DetalleVentaService;
 import com.megalabsapi.model.entity.Detalle_Venta;
 import com.megalabsapi.repository.DetalleVentaRepository;
@@ -27,10 +28,11 @@ public class DetalleVentaController {
 
     @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/reporte")
-    public ResponseEntity<List<Object[]>> obtenerReporteVentas() {
-        List<Object[]> reporte = detalleVentaService.obtenerReporteVentas();
+    public ResponseEntity<List<ReporteVentasDTO>> obtenerReporteVentas() {
+        List<ReporteVentasDTO> reporte = detalleVentaService.obtenerReporteVentas();
         return ResponseEntity.ok(reporte);
     }
+
 
 
     @GetMapping("/correo/{id}")

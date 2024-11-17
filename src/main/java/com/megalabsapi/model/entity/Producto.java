@@ -1,5 +1,6 @@
 package com.megalabsapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import com.megalabsapi.model.enums.StockStatus;
@@ -24,11 +25,12 @@ public class Producto {
     private StockStatus stock;
 
     // Relación con Detalle_Venta
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private List<Detalle_Venta> detalleVentas;
 
     // Relación con Entrega_Muestra
-    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private List<Entrega_Muestra> entregaMuestras;
     // Relación con Control_Calidad
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)

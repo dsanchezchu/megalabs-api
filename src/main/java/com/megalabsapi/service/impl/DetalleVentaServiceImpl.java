@@ -1,8 +1,10 @@
 package com.megalabsapi.service.impl;
 
+import com.megalabsapi.dto.ReporteVentasDTO;
 import com.megalabsapi.integration.notification.email.dto.Mail;
 import com.megalabsapi.integration.notification.email.service.EmailService;
 import com.megalabsapi.model.entity.Detalle_Venta;
+import com.megalabsapi.model.enums.StockStatus;
 import com.megalabsapi.repository.DetalleVentaRepository;
 import com.megalabsapi.service.DetalleVentaService;
 import jakarta.mail.MessagingException;
@@ -25,9 +27,22 @@ public class DetalleVentaServiceImpl implements DetalleVentaService {
 
     @Autowired
     private DetalleVentaRepository detalleVentaRepository;
-    public List<Object[]> obtenerReporteVentas() {
-        return detalleVentaRepository.obtenerReporteVentas();
+
+    @Override
+    public List<ReporteVentasDTO> obtenerReporteVentas() {
+        List<Object[]> resultados = detalleVentaRepository.obtenerReporteVentas();
+        return resultados.stream()
+                .map(fila -> new ReporteVentasDTO(
+                        (Integer) fila[0], // idProducto
+                        (String) fila[1],  // nombreProducto
+                        (StockStatus) fila[2], // estadoStock
+                        (Long) fila[3],    // totalVentas
+                        (Double) fila[4]   // precioPromedio
+                ))
+                .toList();
     }
+
+
 
     @Override
     public Detalle_Venta obtenerDetalleVenda(int idDetalleVenta) {

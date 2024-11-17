@@ -1,5 +1,6 @@
 package com.megalabsapi.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class ReporteCumplimientoRegulatorio extends Reporte {
 
     @ManyToOne
     @JoinColumn(name = "producto_id", referencedColumnName = "ID_Producto", nullable = false)
+    @JsonBackReference
     private Producto producto;
 
 }
