@@ -1,8 +1,8 @@
 -- Tabla cliente
 INSERT INTO cliente (ruc, email, especializacion, licencia, nombre)
 VALUES
-    ('98354231024', 'cliente1@ejemplo.com', 'Farmacia', 'LIC-001', 'Juan Perez'),
-    ('98354231025', 'cliente2@ejemplo.com', 'Clínica', 'LIC-002', 'Ana Lopez');
+    ('98354231024', 'jeffry.25.ru@gmail.com', 'Farmacia', 'LIC-001', 'Juan Perez'),
+    ('98354231025', 'diego270@outlook.com', 'Clínica', 'LIC-002', 'Ana Lopez');
 
 -- Tabla encuesta_entrega
 INSERT INTO encuesta_entrega (id, comentarios, estado_producto, facilidad_contacto, fecha_encuesta, id_pedido, nombre_cliente, profesionalismo_personal, puntualidad_entrega)
