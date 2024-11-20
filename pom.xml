@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.megalabs-api</groupId>
-    <artifactId>megalabas-api</artifactId>
-    <version>0.0.1</version>
-    <name>megalabas-api</name>
-    <description>megalabas-api</description>
+    <artifactId>megalabs-api</artifactId>
+    <version>0.1.3</version>
+    <name>megalabs-api</name>
+    <description>megalabs-api</description>
     <url/>
     <licenses>
         <license/>
