@@ -2,7 +2,7 @@
 FROM openjdk:21-jdk-slim
 
 # Define la variable del archivo JAR
-ARG JAR_FILE=target/megalabs-api-0.1.3.jar
+ARG JAR_FILE=target/megalabs-api-0.1.4.jar
 
 # Copia el archivo JAR en el contenedor
 COPY ${JAR_FILE} megalabs-api.jar
