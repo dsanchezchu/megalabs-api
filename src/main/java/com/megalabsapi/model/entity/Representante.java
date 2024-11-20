@@ -4,6 +4,8 @@ import jakarta.validation.constraints.Email;
 import lombok.Data;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "representante")
@@ -36,4 +38,7 @@ public class Representante {
     @Email
     @Column(name = "email", nullable = false, length = 100)  // Ajuste de longitud para correos electrónicos largos
     private String email;
+
+    @OneToMany(mappedBy = "representante", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Cita> citas;
 }

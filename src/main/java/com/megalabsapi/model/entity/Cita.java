@@ -1,22 +1,36 @@
 package com.megalabsapi.model.entity;
+
+import com.megalabsapi.model.enums.CitaMotivo;
+import com.megalabsapi.model.enums.EstadoCita;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @Entity
 public class Cita {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombreCliente;
-    private String motivo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_ruc", nullable = false) // Relación con Cliente
+    private Cliente cliente;
+
+    @Enumerated(EnumType.STRING) // Guardar motivo como texto
+    private CitaMotivo motivo;
+
     private LocalDateTime fechaHora;
-    private String estado;
+
+    @Enumerated(EnumType.STRING)
+    private EstadoCita estado;
 
     private boolean cancelada;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "representante_dni", nullable = false) // Relación con Representante
+    private Representante representante;
 }
