@@ -1,8 +1,10 @@
 package com.megalabsapi.api;
 
 import com.megalabsapi.dto.EstudioClinicoDTO;
+import com.megalabsapi.dto.RegistroEstudioClinicoDTO;
 import com.megalabsapi.service.ControlCalidadService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -31,6 +33,17 @@ public class ControlCalidadController {
             return controlCalidadService.buscarPorFecha(fechaInicio, fechaFin);
         } else {
             return List.of(); // Lista vacía si no se pasan criterios
+        }
+    }
+
+    // Endpoint para registrar estudios clínicos
+    @PostMapping("/registrar/estudio-clinico")
+    public ResponseEntity<String> registrarEstudioClinico(@RequestBody RegistroEstudioClinicoDTO registroDTO) {
+        try {
+            controlCalidadService.registrarEstudioClinico(registroDTO);
+            return ResponseEntity.ok("Estudio clínico registrado exitosamente.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al registrar el estudio clínico: " + e.getMessage());
         }
     }
 }
