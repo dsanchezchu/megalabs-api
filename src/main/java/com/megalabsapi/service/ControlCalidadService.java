@@ -1,5 +1,6 @@
 package com.megalabsapi.service;
 
+import com.megalabsapi.dto.ActualizarEstudioClinicoDTO;
 import com.megalabsapi.dto.EstudioClinicoDTO;
 import com.megalabsapi.dto.RegistroEstudioClinicoDTO;
 
@@ -14,6 +15,8 @@ public interface ControlCalidadService {
     List<EstudioClinicoDTO> buscarPorFecha(Date fechaInicio, Date fechaFin);
 
     void registrarEstudioClinico(RegistroEstudioClinicoDTO registroDTO);
+
+    void actualizarEstudioClinico(ActualizarEstudioClinicoDTO actualizarDTO);
 }
 
 
