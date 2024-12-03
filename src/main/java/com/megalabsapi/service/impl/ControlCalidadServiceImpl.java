@@ -50,7 +50,11 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
                         control.getProducto().getNombre(),
                         control.getCliente().getNombre(),  // Suponiendo que ahora haya una relación directa con Cliente
                         control.getFecha(),  // Utiliza 'fecha' de Control_Calidad
-                        control.getResultado()
+                        control.getResultado(),
+                        control.getEstado(),
+                        control.getMetodosAnaliticos().stream()
+                                .map(MetodoAnalitico::getNombre)
+                                .collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }
@@ -63,9 +67,13 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
                 new EstudioClinicoDTO(
                         control.getIdControl(),
                         control.getProducto().getNombre(),
-                        control.getCliente().getNombre(),
-                        control.getFecha(),
-                        control.getResultado()
+                        control.getCliente().getNombre(),  // Suponiendo que ahora haya una relación directa con Cliente
+                        control.getFecha(),  // Utiliza 'fecha' de Control_Calidad
+                        control.getResultado(),
+                        control.getEstado(),
+                        control.getMetodosAnaliticos().stream()
+                                .map(MetodoAnalitico::getNombre)
+                                .collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }
@@ -78,9 +86,13 @@ public class ControlCalidadServiceImpl implements ControlCalidadService {
                 new EstudioClinicoDTO(
                         control.getIdControl(),
                         control.getProducto().getNombre(),
-                        control.getCliente().getNombre(),
-                        control.getFecha(),
-                        control.getResultado()
+                        control.getCliente().getNombre(),  // Suponiendo que ahora haya una relación directa con Cliente
+                        control.getFecha(),  // Utiliza 'fecha' de Control_Calidad
+                        control.getResultado(),
+                        control.getEstado(),
+                        control.getMetodosAnaliticos().stream()
+                                .map(MetodoAnalitico::getNombre)
+                                .collect(Collectors.toList())
                 )
         ).collect(Collectors.toList());
     }

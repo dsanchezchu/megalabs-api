@@ -31,6 +31,13 @@ public class MetodoAnaliticoController {
         }
     }
 
+
+    @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
+    @GetMapping("/listarTodos")
+    public List<MetodoAnalitico> obtenerTodosMetodos() {
+        return metodoAnaliticoService.obtenerTodosMetodos();
+    }
+
     @PreAuthorize("hasRole('ROLE_REPRESENTANTE')")
     @GetMapping("/{id}")
     public Optional<MetodoAnalitico> obtenerMetodoPorId(@PathVariable Integer id) {
