@@ -124,7 +124,8 @@ public class AuthController {
         // Crear el objeto AuthResponseDTO con los datos requeridos
         String nombre = recoveryToken.getRepresentante().getNombre();
         String role = "ROLE_REPRESENTANTE";
-        AuthResponseDTO response = new AuthResponseDTO(newToken, nombre, role);
+        String dni = recoveryToken.getRepresentante().getDni();
+        AuthResponseDTO response = new AuthResponseDTO(newToken, nombre, role, dni);
 
         return ResponseEntity.ok(response);
     }

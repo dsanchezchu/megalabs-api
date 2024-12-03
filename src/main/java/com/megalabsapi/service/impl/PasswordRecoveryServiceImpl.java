@@ -79,7 +79,7 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
 
         // Enviar el correo utilizando el template de Thymeleaf
         try {
-            emailService.sendEmail(mail, "password-reset-code.html"); // Asegúrate de usar la plantilla correcta
+            emailService.sendEmail(mail, "password-reset-templates.html"); // Asegúrate de usar la plantilla correcta
         } catch (MessagingException e) {
             throw new RuntimeException("Error al enviar el correo de recuperación", e);
         }
