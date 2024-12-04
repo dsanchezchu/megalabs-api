@@ -1,11 +1,13 @@
 services:
   - type: web
-    name: MegalabsAPI
+    name: spring-boot-backend
     env: docker
-    dockerfilePath: Dockerfile
+    buildCommand: ./mvnw clean package -DskipTests  # Construcción de la aplicación con Maven
+    startCommand: java -jar target/*.jar           # Comando para ejecutar el archivo .jar generado
+    git:
+      branch: main  # Rama del repositorio de GitHub que deseas desplegar (puedes cambiar 'main' si es necesario)
+      repo: https://github.com/dsanchezchu/megalabs-api.git  # URL de tu repositorio en GitHub
     envVars:
-      - key: JAVA_OPTS
-        value: "-Xmx512m" # Ajusta según los recursos que necesites
-    regions: oregon # Cambia esto según la región que prefieras
-    healthCheckPath: "/" # Cambia según el endpoint de tu aplicación para verificar la salud
-    plan: free # Cambia el plan según lo que necesites
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod   # Puedes cambiar esto si tienes diferentes perfiles de Spring
+    autoDeploy: true  # Activa la opción para despliegues automáticos cuando haya cambios en el repositorio
