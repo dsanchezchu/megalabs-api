@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: MegalabsAPI
+    env: docker
+    dockerfilePath: Dockerfile
+    envVars:
+      - key: JAVA_OPTS
+        value: "-Xmx512m" # Ajusta según los recursos que necesites
+    regions: oregon # Cambia esto según la región que prefieras
+    healthCheckPath: "/" # Cambia según el endpoint de tu aplicación para verificar la salud
+    plan: free # Cambia el plan según lo que necesites
