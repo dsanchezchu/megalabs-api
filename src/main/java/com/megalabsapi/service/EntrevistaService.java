@@ -2,16 +2,17 @@ package com.megalabsapi.service;
 
 import java.sql.Date;
 import java.util.List;
-import com.megalabsapi.model.entity.Entrevista;
+
+import com.megalabsapi.dto.EntrevistaHisDTO;
 
 public interface EntrevistaService {
-    List<Entrevista> obtenerEntrevistasPorRepresentante(String dniRepresentante);
-    Entrevista crearEntrevista(Entrevista entrevista);
-    Entrevista actualizarEntrevista(Integer idEntrevista, Entrevista entrevista);
+    List<EntrevistaHisDTO> obtenerEntrevistasPorRepresentante(String dniRepresentante);
+    EntrevistaHisDTO crearEntrevista(EntrevistaHisDTO entrevista);
+    EntrevistaHisDTO actualizarEntrevista(Integer idEntrevista, EntrevistaHisDTO entrevista);
     void eliminarEntrevista(Integer idEntrevista);
-    List<Entrevista> obtenerTodasLasEntrevistas();
-    List<Entrevista> obtenerEntrevistasPorFecha(Date fecha);
-    List<Entrevista> obtenerEntrevistasPorSede(String lugarSede);
-    List<Entrevista> obtenerEntrevistasPorCliente(String rucCliente);
+    List<EntrevistaHisDTO> obtenerTodasLasEntrevistas();
+    List<EntrevistaHisDTO> obtenerEntrevistasPorFecha(Date fecha);
+    List<EntrevistaHisDTO> obtenerEntrevistasPorSede(String lugarSede);
+    List<EntrevistaHisDTO> obtenerEntrevistasPorCliente(String rucCliente);
 
 }
