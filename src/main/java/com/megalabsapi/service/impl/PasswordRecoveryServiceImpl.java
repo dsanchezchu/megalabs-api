@@ -52,8 +52,8 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
     }
 
     @Override
-    public void createPasswordRecoveryToken(String email) throws UnsupportedEncodingException {
-        // Buscar al representante por correo electrónico usando Optional para manejar el caso de no encontrado
+    public void createPasswordRecoveryToken(String email) {
+        // Buscar al representante por correo electrónico
         Representante representante = representanteRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Correo electrónico no encontrado"));
 
@@ -64,28 +64,25 @@ public class PasswordRecoveryServiceImpl implements PasswordRecoveryService {
         PasswordRecoveryToken recoveryToken = new PasswordRecoveryToken();
         recoveryToken.setToken(token);
         recoveryToken.setRepresentante(representante);
-        recoveryToken.setExpiryDate(Timestamp.from(Instant.now().plusSeconds(tokenExpirationTime))); // Token configurable
+        recoveryToken.setExpiryDate(Timestamp.from(Instant.now().plusSeconds(tokenExpirationTime)));
 
         // Guardar el token en la base de datos
         tokenRepository.save(recoveryToken);
 
-        // Codificar el token para la URL de recuperación
-        String encodedToken = URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
-        String recoveryUrl = baseUrl + "/auth/verify-recovery-token?token=" + encodedToken;
-
         // Preparar el modelo con los datos para el correo
         Map<String, Object> model = new HashMap<>();
         model.put("nombreUsuario", representante.getNombre());
-        model.put("urlRecuperacion", recoveryUrl);
+        model.put("codigoRecuperacion", token); // Incluimos solo el token
 
         // Crear el objeto Mail con los datos
-        Mail mail = emailService.createMail(representante.getEmail(), "Recuperación de Contraseña", model, "no-reply@megalabs.com");
+        Mail mail = emailService.createMail(representante.getEmail(), "Código de Recuperación de Contraseña", model, "no-reply@megalabs.com");
 
         // Enviar el correo utilizando el template de Thymeleaf
         try {
-            emailService.sendEmail(mail, "password-reset-templates.html");
+            emailService.sendEmail(mail, "password-reset-templates.html"); // Asegúrate de usar la plantilla correcta
         } catch (MessagingException e) {
             throw new RuntimeException("Error al enviar el correo de recuperación", e);
         }
     }
+
 }

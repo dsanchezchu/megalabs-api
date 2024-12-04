@@ -12,4 +12,5 @@ public class AuthResponseDTO {
     private String token;       // El token JWT
     private String nombre;      // El nombre completo del representante
     private String role;        // El rol del representante (e.g., ROLE_REPRESENTANTE)
+    private String dni;         // El DNI del representante
 }
