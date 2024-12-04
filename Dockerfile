@@ -7,23 +7,22 @@ WORKDIR /app
 # Copiar los archivos del repositorio al contenedor
 COPY . .
 
-# Instalar Maven y compilar el proyecto
-RUN apt-get update && apt-get install -y maven && \
-    ./mvnw clean package -DskipTests
+# Dar permisos de ejecución al archivo mvnw
+RUN chmod +x ./mvnw
 
+# Instalar Maven (si es necesario) y compilar el proyecto
+RUN ./mvnw clean package -DskipTests
 
-
-# Crear una nueva imagen con el archivo JAR compilado
+# Usar una imagen base de OpenJDK para la ejecución
 FROM openjdk:21-jdk-slim
 
-# Establecer el directorio de trabajo para el contenedor
+# Directorio de trabajo en el contenedor de ejecución
 WORKDIR /app
 
-# Copiar el archivo JAR de la etapa de compilación
-COPY --from=build /app/target/*.jar app.jar
+# Copiar el archivo .jar desde la etapa de construcción
 COPY --from=build /app/target/*.jar app.jar
 
-# Exponer el puerto en el que la aplicación escuchará
+# Exponer el puerto que usará la aplicación
 EXPOSE 8080
 
 # Comando para ejecutar la aplicación
